@@ -50,19 +50,42 @@ app.post("/", async (req, res) => {
   }
 });
 
-// app.post('/', async (req, res) => {
-//   const {country, name, difficulty, duration, season} = req.body
-//   const activity = await Activity.findOne({
+
+module.exports = app;
+
+
+
+// esta era para probar el filtro 
+
+
+// app.get('/', async (req, res) => {
+//   // const {country, name, difficulty, duration, season} = req.body
+//   const activity = await Activity.findAll({
+//     include:{
+//     model: Country,
 //     where: {ID: 'COL'},
-//     include: [{
-//     model: Activity,
-//     // attributes: {exclude: 'country_activity'}
-//     // attributes: ['name']
-//     }]
-//   })
-//   console.log(join.toJSON());
-//   res.send(join.toJSON())
+//     attributes:[]
+//   },
 // })
+//   console.log(activity);
+//   res.send(activity)
+// })
+
+
+// Payment.findAll({
+//     where: {
+//         DairyId: req.query.dairyid
+//     },
+//     attributes: {
+//         exclude: ['createdAt', 'updatedAt']
+//     },
+//     include: {
+//         model: Customer,
+//         attributes:['customerName', 'phoneNumber']
+//     }
+// })
+
+
 
 // app.get('/', async (req, res) => {
 //   const activity = await Activity.findOne({
@@ -103,4 +126,3 @@ app.post("/", async (req, res) => {
 // // res.json(req.body);
 // })
 
-module.exports = app;

@@ -4,6 +4,7 @@ const { DataTypes } = require('sequelize');
 module.exports = (sequelize) => {
   // defino el modelo
   sequelize.define('country', {
+    //cambiar ID por id
     ID: {
       type: DataTypes.STRING(3),
       primaryKey: true,
@@ -31,5 +32,4 @@ module.exports = (sequelize) => {
       type: DataTypes.INTEGER,
     }
   }, {timestamps: false});
-  // console.log(sequelize.models);
 };
