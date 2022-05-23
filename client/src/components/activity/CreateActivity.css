@@ -1,0 +1,37 @@
+.containerActivity {
+  display: flex;
+  justify-content: center;
+}
+.formulation1 {
+  display: inline-flex;
+  /*justify-content: center;*/
+}
+.formulation2 {
+  display: inline-flex;
+  height: 22px;
+}
+.createActivity {
+  display: flex;
+  flex-direction: column;
+  width: 200px;
+  align-items: center;
+}
+.containerSearch {
+  width: 230px;
+}
+.containerNameCountries {
+  display: flex;
+  flex-direction: column;
+  width: 230px;
+  height: 200px;
+  overflow: scroll;
+}
+.deleteAddedCountries{
+  display: flex;
+  justify-content: space-between;
+  width: 150px;
+}
+.deleteAddedCountries button{
+  /*display: flex;*/
+  /*justify-content: right;*/
+}

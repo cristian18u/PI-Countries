@@ -1,10 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-export default function CountryCard({ name, flag, continent, ID }) {
+export default function CountryCard({ name, flag, continent, id }) {
   return (
     <div>
-      <Link to={`/country/${ID}`}>
+      <Link to={`/country/${id}`}>
         <h2>{name}</h2>
       </Link>
       <img width={300} src={flag} alt="bandera" />

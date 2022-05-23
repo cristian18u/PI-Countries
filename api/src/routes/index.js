@@ -6,9 +6,8 @@ const activityRouter = require('./activity.js')
 const router = Router();
 
 // Configurar los routers
-router.get('/', (req, res) => {
-  res.send('soy el mejor')
-})
+// router.get('/', (req, res) => {
+// })
 
 router.use('/countries', countriesRouter);
 

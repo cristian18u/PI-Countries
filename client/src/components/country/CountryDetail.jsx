@@ -6,7 +6,7 @@ import './CountryDetail.css'
 
 export default function CountryDetail({ match }) {
   const {
-    ID,
+    id,
     name,
     flag,
     continent,
@@ -28,7 +28,7 @@ export default function CountryDetail({ match }) {
     <div>
       <h3>{name}</h3>
       <img width={300} src={flag} alt="flag" />
-      <p>ID: {ID}</p>
+      <p>id: {id}</p>
       <p>Continent: {continent}</p>
       <p>Subregion: {subregion}</p>
       <p>Population: {population}</p>
@@ -38,7 +38,7 @@ export default function CountryDetail({ match }) {
       <div className="containerActivity">
         {activities?.map((activity) => (
           <ActivityCard
-            key={activity.ID}
+            key={activity.id}
             name={activity.name}
             difficulty={activity.difficulty}
             duration={activity.duration}

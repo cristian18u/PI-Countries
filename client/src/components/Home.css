@@ -3,3 +3,143 @@
   flex-wrap: wrap;
   justify-content: space-around;
 }
+.contenedordesplegable{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: right;
+}
+
+.buttonHome {
+ background-color: #456789;
+  width: 80px;
+  color: white;
+  border: none;
+  padding: 5px;
+  font-size: 10px;
+  cursor: pointer;
+}
+.button {
+  background-color: #456789;
+  width: 80px;
+  color: white;
+  border: none;
+  padding: 5px;
+  font-size: 10px;
+  cursor: pointer;
+}
+
+.link button{
+  color: black;
+  /*display: block;*/
+  font-size: 10px;
+  padding: 5px;
+  width: 80px;
+  /*border: none;*/
+  /*padding: 5px;*/
+  /*font-size: 10px;*/
+  /*cursor: pointer;*/
+}
+.link2 button{
+  /*color: black;*/
+  /*display: block;*/
+  font-size: 10px;
+  padding: 5px;
+  width: 80px;
+}
+.link3 button{
+  /*color: black;*/
+  /*display: block;*/
+  font-size: 10px;
+  padding: 5px;
+  width: 80px;
+}
+
+.link{
+  background-color: #f9f9f9;
+  width: 80px;
+  display: none;
+}
+.link2{
+  background-color: #f9f9f9;
+  width: 80px;
+  display: none;
+}
+.link3{
+  background-color: #f9f9f9;
+  width: 80px;
+  display: none;
+}
+
+.link button:hover{
+  background-color: #f1f1f1;
+}
+.link2 button:hover{
+  background-color: #f1f1f1;
+}
+.link3 button:hover{
+  background-color: #f1f1f1;
+}
+
+.desplegable:hover .link{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: left;
+  position: absolute;
+}
+
+.desplegable2:hover .link2{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: left;
+  position: absolute;
+}
+.desplegable3:hover .link3{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: left;
+  position: absolute;
+}
+.paginated{
+  display: flex;
+  justify-content: center;
+  align-items: 20px;
+}
+/*.desplegable{
+  position: static;
+}*/
+/*
+.link2 button{
+ /* text-decoration: none;
+  color: black;*/
+  /*display: block;*/
+/*  font-size: 10px;
+  padding: 5px;*/
+/*}*/
+
+/*.link2{
+  background-color: #f9f9f9;
+  width: 5px;
+  display: none;
+}
+*/
+/*.link2 button:hover{*/
+  /*background-color: #f1f1f1;*/
+/*}*/
+/**/
+/*.desplegable2:hover .link{
+  display: block;
+}*/
+
+/*.desplegable2{
+  position: absolute;
+}*/
+
+/*.button2 {
+  background-color: #456789;
+  width: 100px;
+  color: white;
+  border: none;
+  padding: 5px;
+  font-size: 10px;
+  cursor: pointer;
+}*/
