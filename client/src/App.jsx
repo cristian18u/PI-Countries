@@ -4,12 +4,16 @@ import CountryDetail from "./components/country/CountryDetail.jsx";
 import CreateActivity from "./components/activity/CreateActivity";
 import Home from "./components/Home.jsx";
 import Nav from "./components/Nav.jsx";
+import LandingPage from "./components/landingPage/LandingPage.jsx";
+
 
 function App() {
   return (
     <React.Fragment>
-      <Nav />
-      <Route exact path={"/"} component={Home} />
+      <Route exact path={"/"} component={LandingPage} />
+      <Route path={"/home" } component={Nav} />
+      <Route path={"/activity" } component={Nav} />
+      <Route exact path={"/home"} component={Home} />
       <Route path={"/country/:id"} component={CountryDetail} />
       <Route path={"/activity"} component={CreateActivity} />
     </React.Fragment>

@@ -8,7 +8,6 @@ app.get("/", async (req, res, next) => {
   const { name } = req.query;
   console.log(req.query);
   try {
-    // return Country.findAll({ order: [['continent']], attributes: ['continent']}).then(result => res.send(result))
     if (name) {
       const countries = await axios.get(
         `https://restcountries.com/v3/name/${name}`
@@ -37,7 +36,7 @@ app.get("/order", (req, res, next) => {
   const { order } = req.query;
   try {
     if (order === "nameAsc")
-      return Country.findAll({ order: [["name"]] }).then((result) =>
+      return Country.findAll({ order: ["name"] }).then((result) =>
         res.send(result)
       );
     if (order === "nameDes")
@@ -45,7 +44,7 @@ app.get("/order", (req, res, next) => {
         res.send(result)
       );
     if (order === "populationAsc")
-      return Country.findAll({ order: [["population"]] }).then((result) =>
+      return Country.findAll({ order: ["population"] }).then((result) =>
         res.send(result)
       );
     if (order === "populationDes")
@@ -99,6 +98,7 @@ app.get("/filterCountry", (req, res, next) => {
       ],
     },
     group: ["name"],
+    order: ["name"],
   })
     .then((result) => {
       if (result.length == 0) throw "no result";
@@ -107,10 +107,7 @@ app.get("/filterCountry", (req, res, next) => {
     .catch((error) => next(error));
 });
 
-app.post('/', (req, res) => {
-console.log(req.body)
-res.send('no proble')
-})
+
 // para cargar la base de datos;
 // app.get("/recargar", async (req, res, next) => {
 // try {

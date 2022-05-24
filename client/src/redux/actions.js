@@ -88,7 +88,7 @@ export function createActivity(body) {
   console.log('body')
   return function (dispatch) {
   axios
-      .post("http://localhost:3001/countries", body)
+      .post("http://localhost:3001/activity", body)
       .then((result) => dispatch({ type: CREATE_ACTIVITY, payload: result.data }))
  };
 }

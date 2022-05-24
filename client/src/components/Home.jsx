@@ -36,9 +36,7 @@ export default function Home() {
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          // setTimeout(function () {
           dispatch(getCountry(name));
-          // }, 1000);
           setName("");
         }}
       >
@@ -113,9 +111,13 @@ export default function Home() {
         )}
       </div>
       <div className="paginated">
-      <button style={page==1?{display:'none'}:null}onClick={() => paginated("prev")}>prev</button>
-      <div>{`${page} de ${pageTotal}`}</div>
-      <button onClick={() => paginated("next")}>next</button>
+      {page>1?<button onClick={() => paginated("prev")}>prev</button>:null}
+      {/*<button style={page==1?{display:'none'}:null}onClick={() => paginated("prev")}>prev</button>*/}
+      <div className="paginatedNum">
+      <div className='pageActual'>{page}</div>
+      <div>{`de ${pageTotal}`}</div>
+      </div>
+      {page<pageTotal?<button onClick={() => paginated("next")}>next</button>:null}
       </div>
     </div>
   );

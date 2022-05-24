@@ -21,26 +21,11 @@ const initialState = {
   nameCountries: [],
   addedCountries: [],
   countriesDb: [],
+  pageActionActual: 'home',
   page: 1,
   pageTotal: 0,
 };
 
-// .filter((item, index) => {
-//   return (
-//     payload.map((country) => country.continent).indexOf(item) === index
-//   );
-// })
-
-// function firstLetterUpperCase(sentence) {
-//   let word = sentence.split(" ").map((word) => {
-//     return word[0].toUpperCase() + word.slice(1);
-//   });
-//   return word.join(" ");
-// }
-
-// function SortArray(x, y) {
-//   return x.name.localeCompare(y.name);
-// }
 
 export default function rootReducer(state = initialState, { type, payload }) {
   switch (type) {
@@ -52,10 +37,10 @@ export default function rootReducer(state = initialState, { type, payload }) {
         countriesDb: payload[0].data,
         activities: payload[2].data.map((activity) => activity.name),
         pageTotal: Math.ceil((payload[0].data.length - 9) / 10) + 1,
+        pageActionActual: 'home',
+        page: 1,
       };
     case GET_COUNTRY:
-      // console.log(payload)
-      // if(!payload)
       return {
         ...state,
         countries: payload,
@@ -63,25 +48,27 @@ export default function rootReducer(state = initialState, { type, payload }) {
     case ORDER:
       return {
         ...state,
-        countries: payload,
+        page: 1,
+        pageActionActual: 'order',
+        countries: payload.filter((element, index) => index < 9),
+        countriesOrderDb: payload,
+        pageTotal: Math.ceil((payload.length - 9) / 10) + 1,
       };
     case FILTER:
       return {
         ...state,
+        page: 1,
+        pageActionActual: 'filter',
         countries: state.countriesDb.filter(
           (country) => country.continent === payload
+        ).filter((element, index) => index < 9),
+
+        countriesFilterDb: state.countriesDb.filter(
+          (country) => country.continent === payload
         ),
-      };
-    case FILTER_NAME_COUNTRY:
-      return {
-        ...state,
-        nameCountries: payload?.map((element) => element.name),
-      };
-    case ADD_COUNTRY:
-      return {
-        ...state,
-        addedCountries: [...new Set([...state.addedCountries, payload])],
-        cambio: null,
+        pageTotal: Math.ceil((state.countriesDb.filter(
+          (country) => country.continent === payload
+        ).length - 9) / 10) + 1,
       };
     case DELETE_ADDED_COUNTRY:
       return {
@@ -120,11 +107,39 @@ export default function rootReducer(state = initialState, { type, payload }) {
       }
       return state;
     case RELOAD_PAGE:
+    if (state.pageActionActual==="home"){
+      return {
+              ...state,
+              countries: state.countriesDb.filter((element, index) => {
+                return index >= state.page * 10 - 11 && index < state.page * 10 - 1;
+              })}
+            }
+    if (state.pageActionActual==="filter"){
+      return {
+              ...state,
+              countries: state.countriesFilterDb.filter((element, index) => {
+                return index >= state.page * 10 - 11 && index < state.page * 10 - 1;
+              })
+            }
+      }
+      if (state.pageActionActual==="order"){
+      return {
+              ...state,
+              countries: state.countriesOrderDb.filter((element, index) => {
+                return index >= state.page * 10 - 11 && index < state.page * 10 - 1;
+              })
+            }
+      }
+    return state;
+    case FILTER_NAME_COUNTRY:
       return {
         ...state,
-        countries: state.countriesDb.filter((element, index) => {
-          return index >= state.page * 10 - 11 && index < state.page * 10 - 1;
-        }),
+        nameCountries: payload?.map((element) => element.name),
+      };
+    case ADD_COUNTRY:
+      return {
+        ...state,
+        addedCountries: [...new Set([...state.addedCountries, payload])],
       };
     default:
       return state;

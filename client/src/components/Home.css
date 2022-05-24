@@ -102,7 +102,21 @@
 .paginated{
   display: flex;
   justify-content: center;
-  align-items: 20px;
+}
+
+.paginatedNum{
+  display: flex;
+  justify-content: space-around;
+  width: 80px;
+}
+
+.pageActual{
+  /*background-color: yellow;*/
+  width: 20px;
+  /*height: 20px;*/
+  /*color: blue;*/
+  border: 2px solid blue;
+  text-align: center;
 }
 /*.desplegable{
   position: static;

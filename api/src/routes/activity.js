@@ -26,46 +26,28 @@ app.get("/filter", (req, res, next) => {
 
 app.post("/", async (req, res, next) => {
   const { country, name, difficulty, duration, season } = req.body;
-  console.log("b", req.body);
+
   try {
-    const activityDb = await Activity.findOne({
-      where: {
-        name,
-        difficulty,
-        duration,
-        season,
-      },
-    });
-    console.log(activityDb);
-    if (activityDb) {
-      const countryDb = await Country.findOne({
-        where: { name: country },
-      });
-      console.log("cb", countryDb);
-      const resultado = await countryDb.addActivity(activityDb);
-      if (!resultado) throw "La activity ya existe";
-      console.log("r", resultado);
-      return res.send(resultado);
-    }
-    const activity = await Activity.create({
+    await Activity.create({
       name,
       difficulty,
       duration,
       season,
     });
-    console.log("a", activity);
-    const countryDb = await Country.findOne({
-      where: { name: country },
+
+    const activityDb = await Activity.findOne({
+      where: { name },
     });
-    console.log("c", countryDb);
-    const resultado = await countryDb.addActivity(activity);
-    console.log("r", resultado);
-    res.send(resultado);
-    // const activity = await Activity.findOne({
-    //   where: {name, difficulty, duration, season},
-    // })
-    // console.log(join.toJSON());
-    // res.send(join.toJSON())
+
+    country.map(async country => {
+      const countryDb = await Country.findOne({
+      where: { name: country },
+    })
+    await countryDb.addActivity(activityDb);
+    })
+
+    res.send('Actividad Creada exitosamente')
+
   } catch (error) {
     next(error);
   }

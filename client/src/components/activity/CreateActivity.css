@@ -22,9 +22,9 @@
 .containerNameCountries {
   display: flex;
   flex-direction: column;
-  width: 230px;
+  width: 195px;
   height: 200px;
-  overflow: scroll;
+  overflow-y: scroll;
 }
 .deleteAddedCountries{
   display: flex;
@@ -34,4 +34,7 @@
 .deleteAddedCountries button{
   /*display: flex;*/
   /*justify-content: right;*/
+}
+span{
+color: red;
 }
