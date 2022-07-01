@@ -39,15 +39,14 @@ app.post("/", async (req, res, next) => {
       where: { name },
     });
 
-    country.map(async country => {
+    country.map(async (country) => {
       const countryDb = await Country.findOne({
-      where: { name: country },
-    })
-    await countryDb.addActivity(activityDb);
-    })
+        where: { name: country },
+      });
+      await countryDb.addActivity(activityDb);
+    });
 
-    res.send('Actividad Creada exitosamente')
-
+    res.send("Actividad Creada exitosamente");
   } catch (error) {
     next(error);
   }

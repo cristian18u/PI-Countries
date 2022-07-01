@@ -1,7 +1,7 @@
-const { Router } = require('express');
+const { Router } = require("express");
 // Importar todos los routers;
-const countriesRouter = require('./countries.js');
-const activityRouter = require('./activity.js')
+const countriesRouter = require("./countries.js");
+const activityRouter = require("./activity.js");
 
 const router = Router();
 
@@ -9,8 +9,8 @@ const router = Router();
 // router.get('/', (req, res) => {
 // })
 
-router.use('/countries', countriesRouter);
+router.use("/countries", countriesRouter);
 
-router.use('/activity', activityRouter);
+router.use("/activity", activityRouter);
 
 module.exports = router;

@@ -70,7 +70,7 @@ app.get("/filterCountry", (req, res, next) => {
   const { name } = req.query;
 
   function firstLetterUpperCase(sentence) {
-    let word = sentence
+    const word = sentence
       .toLowerCase()
       .split(" ")
       .map((word) => {
@@ -106,7 +106,6 @@ app.get("/filterCountry", (req, res, next) => {
     })
     .catch((error) => next(error));
 });
-
 
 // para cargar la base de datos;
 // app.get("/recargar", async (req, res, next) => {

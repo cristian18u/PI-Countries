@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon -L",
-    "test": "mocha -w ./tests/**/*.spec.js"
+    "test": "mocha -w ./tests/**/*.spec.js",
+    "start-dev": "nodemon --exec 'npm run lint'",
+    "lint": "eslint src/db.js --ext .js --fix"
   },
   "author": "Henry",
   "license": "ISC",
@@ -28,9 +30,14 @@
   },
   "devDependencies": {
     "chai": "^4.2.0",
-    "eslint-plugin-react": "^7.29.4",
+    "eslint": "^8.18.0",
+    "eslint-config-standard": "^17.0.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-n": "^15.2.3",
+    "eslint-plugin-promise": "^6.0.0",
     "mocha": "^8.2.1",
-    "nodemon": "^2.0.6",
+    "nodemon": "^2.0.18",
     "prettier": "2.6.2",
     "supertest": "^6.0.1",
     "supertest-session": "^4.1.0"
