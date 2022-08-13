@@ -9,22 +9,11 @@ app.get("/", async (req, res, next) => {
   console.log(req.query);
   try {
     if (name) {
-      const countries = await axios.get(
-        `https://restcountries.com/v3/name/${name}`
-      );
-      const countriesName = countries.data.map((result) => {
-        return {
-          id: result.cca3,
-          name: result.name.common,
-          flag: result.flags[0],
-          continent: result.continents[0],
-          capital: result.capital ? result.capital[0] : undefined,
-          subregion: result.subregion,
-          area: result.area,
-          population: result.population,
-        };
-      });
-      return res.send(countriesName);
+      return Country.findAll({
+        where: { name: {
+          [Op.startsWith]: name.toLowerCase(),
+        }},
+      }).then((result) => res.send(result))
     }
     return Country.findAll().then((result) => res.send(result));
   } catch (error) {
@@ -57,6 +46,7 @@ app.get("/order", (req, res, next) => {
 });
 
 app.get("/continents", (req, res, next) => {
+  
   return Country.findAll({
     attributes: ["continent"],
     group: ["continent"],
@@ -115,7 +105,7 @@ app.get("/filterCountry", (req, res, next) => {
 //   let database = countriesApi.data.map(async (country) => {
 //   await Country.create({
 //   id: country.cca3,
-//   name: country.name.common,
+//   name: country.name.common.toLowerCase(),
 //   flag: country.flags[0],
 //   continent: country.continents[0],
 //   capital: country.capital?country.capital[0]:undefined,

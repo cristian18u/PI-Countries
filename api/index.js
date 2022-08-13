@@ -18,12 +18,15 @@
 //                       `=---='
 //     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 const server = require('./src/app.js');
+const { load } = require('./src/load.js');
 const { conn } = require('./src/db.js');
 
 // Syncing all the models at once.
-conn.sync().then(() => {
-// conn.sync({ force: true }).then(() => {
-  server.listen(3001, () => {
-    console.log('%s listening at 3001'); // eslint-disable-line no-console
+// conn.sync().then(() => {
+  const restart = false
+conn.sync({ force: restart }).then(() => {
+  server.listen(3001, async () => {
+    if (restart) await load()
+    console.log('listening at 3001...'); // eslint-disable-line no-console
   });
 });
