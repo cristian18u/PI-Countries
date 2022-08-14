@@ -7,6 +7,7 @@ const { Country } = require ('./db.js');
 async function load () {
   console.log('loading database...')
     const countriesApi =  await get('https://restcountries.com/v3/all')
+      // eslint-disable-next-line no-unused-vars
       const database = countriesApi.data.map(async (country) => {
       await Country.create({
       id: country.cca3,
@@ -22,4 +23,14 @@ async function load () {
 console.log('database loaded successfully')
 }
 
-module.exports = {load};
+function firstLetterUpperCase(sentence) {
+  const word = sentence
+    .toLowerCase()
+    .split(" ")
+    .map((word) => {
+      return word[0].toUpperCase() + word.slice(1);
+    });
+  return word.join(" ");
+}
+
+module.exports = {load, firstLetterUpperCase};

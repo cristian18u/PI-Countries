@@ -1,9 +1,11 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import CountryCard from "./country/CountryCard.jsx";
 import {
   getAllCountries,
   getCountry,
+  getCountryInput,
   order,
   filter,
   filterActivity,
@@ -25,11 +27,11 @@ export default function Home() {
     dispatch(reloadPage());
   }
 
-  // React.useEffect(async() => {
-  // if ( name ) dispatch(getCountry(name))
-  // }, [name]);
+  React.useEffect(() => {
+  if ( name ) dispatch(getCountryInput(name))
+  }, [name]);
 
-  const { countries, continents, activities, page, pageTotal } = useSelector((state) => state);
+  const { countries, countriesInput, continents, activities, page, pageTotal } = useSelector((state) => state);
 
   return (
     <div>
@@ -47,6 +49,22 @@ export default function Home() {
           onChange={(e) => setName(e.target.value)}
         />
         <input type="submit" value="Buscar" />
+        {name? (
+          <div className="containerInput">
+            {countriesInput?.map((country, index) => (
+                <button
+                  key={index}
+                  onClick={() => {
+                    setName(country) 
+                    dispatch(getCountry(country))
+                  }}
+                >
+                  {country}
+                </button>
+              ))
+            }
+          </div>
+        ) : null}
       </form>
       <div className="contenedordesplegable">
         <div className="desplegabledefault">

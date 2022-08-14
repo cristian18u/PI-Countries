@@ -1,6 +1,7 @@
 import {
   GET_ALL_COUNTRIES,
   GET_COUNTRY,
+  GET_COUNTRY_INPUT,
   GET_COUNTRY_DETAIL,
   CREATE_ACTIVITY,
   ORDER,
@@ -14,6 +15,7 @@ import {
 } from "./actions.js";
 const initialState = {
   countries: [],
+  countriesInput: [],
   continents: [],
   activities: [],
   countryDetail: {},
@@ -44,6 +46,11 @@ export default function rootReducer(state = initialState, { type, payload }) {
       return {
         ...state,
         countries: payload,
+      };
+    case GET_COUNTRY_INPUT:
+      return {
+        ...state,
+        countriesInput: payload,
       };
     case ORDER:
       return {

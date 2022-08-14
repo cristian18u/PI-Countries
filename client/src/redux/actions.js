@@ -2,6 +2,7 @@ import axios from "axios";
 
 export const GET_ALL_COUNTRIES = "GET_ALL_COUNTRIES";
 export const GET_COUNTRY = "GET_COUNTRY";
+export const GET_COUNTRY_INPUT = "GET_COUNTRY_INPUT";
 export const GET_COUNTRY_DETAIL = "GET_COUNTRY_DETAIL";
 export const CREATE_ACTIVITY = "CREATE_ACTIVITY";
 export const ORDER = "ORDER";
@@ -29,6 +30,15 @@ export function getCountry(name) {
       .get(`http://localhost:3001/countries?name=${name}`)
       .then((result) => dispatch({ type: GET_COUNTRY, payload: result.data }))
       .catch(() => dispatch({ type: GET_COUNTRY, payload: null }));
+  };
+}
+
+export function getCountryInput(name) {
+  return function (dispatch) {
+    axios
+      .get(`http://localhost:3001/countries/input?name=${name}`)
+      .then((result) => dispatch({ type: GET_COUNTRY_INPUT, payload: result.data }))
+      .catch(() => dispatch({ type: GET_COUNTRY_INPUT, payload: null }));
   };
 }
 

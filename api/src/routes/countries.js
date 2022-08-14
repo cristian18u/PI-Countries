@@ -3,6 +3,7 @@ const { Country, Activity } = require("../db.js");
 const axios = require("axios");
 const app = Express();
 const { Op } = require("sequelize");
+const { firstLetterUpperCase } = require("../functions.js");
 
 app.get("/", async (req, res, next) => {
   const { name } = req.query;
@@ -10,12 +11,52 @@ app.get("/", async (req, res, next) => {
   try {
     if (name) {
       return Country.findAll({
-        where: { name: {
-          [Op.startsWith]: name.toLowerCase(),
-        }},
-      }).then((result) => res.send(result))
+        where: {
+          name: {
+            [Op.startsWith]: name.toLowerCase(),
+          },
+        },
+      }).then((result) =>
+        res.send(
+          result.map((country) => {
+            country.name = firstLetterUpperCase(country.name);
+            return country;
+          })
+        )
+      );
     }
-    return Country.findAll().then((result) => res.send(result));
+    return Country.findAll().then((result) =>
+      res.send(
+        result.map((country) => {
+          country.name = firstLetterUpperCase(country.name);
+          return country;
+        })
+      )
+    );
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.get("/input", async (req, res, next) => {
+  const { name } = req.query;
+  console.log(req.query);
+  try {
+    if (name) {
+      return Country.findAll({
+        where: {
+          name: {
+            [Op.startsWith]: name.toLowerCase(),
+          },
+        },
+      }).then((result) =>
+        res.send(
+          result
+            .slice(0, 5)
+            .map((element) => firstLetterUpperCase(element.name))
+        )
+      );
+    }
   } catch (error) {
     next(error);
   }
@@ -46,7 +87,6 @@ app.get("/order", (req, res, next) => {
 });
 
 app.get("/continents", (req, res, next) => {
-  
   return Country.findAll({
     attributes: ["continent"],
     group: ["continent"],
@@ -59,15 +99,15 @@ app.get("/continents", (req, res, next) => {
 app.get("/filterCountry", (req, res, next) => {
   const { name } = req.query;
 
-  function firstLetterUpperCase(sentence) {
-    const word = sentence
-      .toLowerCase()
-      .split(" ")
-      .map((word) => {
-        return word[0].toUpperCase() + word.slice(1);
-      });
-    return word.join(" ");
-  }
+  // function firstLetterUpperCase(sentence) {
+  //   const word = sentence
+  //     .toLowerCase()
+  //     .split(" ")
+  //     .map((word) => {
+  //       return word[0].toUpperCase() + word.slice(1);
+  //     });
+  //   return word.join(" ");
+  // }
 
   const nameModify = firstLetterUpperCase(name);
 
@@ -91,6 +131,7 @@ app.get("/filterCountry", (req, res, next) => {
     order: ["name"],
   })
     .then((result) => {
+      // eslint-disable-next-line eqeqeq, no-throw-literal
       if (result.length == 0) throw "no result";
       res.send(result);
     })
