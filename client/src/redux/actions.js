@@ -4,10 +4,12 @@ export const GET_ALL_COUNTRIES = "GET_ALL_COUNTRIES";
 export const GET_COUNTRY = "GET_COUNTRY";
 export const GET_COUNTRY_INPUT = "GET_COUNTRY_INPUT";
 export const GET_COUNTRY_DETAIL = "GET_COUNTRY_DETAIL";
-export const CREATE_ACTIVITY = "CREATE_ACTIVITY";
-export const ORDER = "ORDER";
-export const FILTER = "FILTER";
+export const FILTER_CONTINENT = "FILTER_CONTINENT";
 export const FILTER_ACTIVITY = "FILTER_ACTIVITY";
+export const ORDER_ALPHABET = "ORDER_ALPHABET";
+export const ORDER_POPULATION = "ORDER_POPULATION";
+export const COUNTRY_FILTER = "COUNTRY_FILTER";
+export const CREATE_ACTIVITY = "CREATE_ACTIVITY";
 export const FILTER_NAME_COUNTRY = "FILTER_NAME_COUNTRY";
 export const ADD_COUNTRY = "ADD_COUNTRY";
 export const DELETE_ADDED_COUNTRY = "DELETE_ADDED_COUNTRY";
@@ -33,11 +35,23 @@ export function getCountry(name) {
   };
 }
 
+export function countryFilter(body) {
+  return function (dispatch) {
+    axios
+      .post(`http://localhost:3001/countries`, body)
+      .then((result) =>
+        dispatch({ type: COUNTRY_FILTER, payload: result.data })
+      )
+      .catch(() => dispatch({ type: COUNTRY_FILTER, payload: null }));
+  };
+}
 export function getCountryInput(name) {
   return function (dispatch) {
     axios
       .get(`http://localhost:3001/countries/input?name=${name}`)
-      .then((result) => dispatch({ type: GET_COUNTRY_INPUT, payload: result.data }))
+      .then((result) =>
+        dispatch({ type: GET_COUNTRY_INPUT, payload: result.data })
+      )
       .catch(() => dispatch({ type: GET_COUNTRY_INPUT, payload: null }));
   };
 }
@@ -52,38 +66,49 @@ export function getCountryDetail(id) {
   };
 }
 
-export function order(order) {
-  return function (dispatch) {
-    axios
-      .get(`http://localhost:3001/countries/order?order=${order}`)
-      .then((result) => dispatch({ type: ORDER, payload: result.data }));
-  };
+// export function order(order) {
+//   return function (dispatch) {
+//     axios
+//       .get(`http://localhost:3001/countries/order?order=${order}`)
+//       .then((result) => dispatch({ type: ORDER, payload: result.data }));
+//   };
+// }
+
+export function filterContinent(payload) {
+  return { type: FILTER_CONTINENT, payload };
+}
+export function filterActivity(payload) {
+  return { type: FILTER_ACTIVITY, payload };
+}
+export function orderAlphabet(payload) {
+  return { type: ORDER_ALPHABET, payload };
+}
+export function orderPopulation(payload) {
+  return { type: ORDER_POPULATION, payload };
 }
 
-export function filter(payload) {
-  return { type: FILTER, payload };
-}
 export function filterNameCountry(name) {
   return function (dispatch) {
     axios
       .get(`http://localhost:3001/countries/filterCountry?name=${name}`)
-      .then((result) => dispatch({ type: FILTER_NAME_COUNTRY, payload: result.data }))
+      .then((result) =>
+        dispatch({ type: FILTER_NAME_COUNTRY, payload: result.data })
+      )
       .catch(() => dispatch({ type: FILTER_NAME_COUNTRY, payload: null }));
   };
 }
 
-export function filterActivity(name) {
-  return function (dispatch) {
-    axios
-      .get(`http://localhost:3001/activity/filter?name=${name}`)
-      .then((result) => dispatch({ type: ORDER, payload: result.data }));
-  };
-}
+// export function filterActivity(name) {
+//   return function (dispatch) {
+//     axios
+//       .get(`http://localhost:3001/activity/filter?name=${name}`)
+//       .then((result) => dispatch({ type: ORDER, payload: result.data }));
+//   };
+// }
 export function sendFormBody(body) {
   // return function (dispatch) {
-    axios
-      .post("http://localhost:3001/countries", body)
-      // .then((result) => dispatch({ type: ORDER, payload: result.data }));
+  axios.post("http://localhost:3001/countries", body);
+  // .then((result) => dispatch({ type: ORDER, payload: result.data }));
   // };
 }
 export function addCountry(payload) {
@@ -95,12 +120,14 @@ export function deleteAddedCountry(payload) {
 }
 
 export function createActivity(body) {
-  console.log('body')
+  console.log("body");
   return function (dispatch) {
-  axios
+    axios
       .post("http://localhost:3001/activity", body)
-      .then((result) => dispatch({ type: CREATE_ACTIVITY, payload: result.data }))
- };
+      .then((result) =>
+        dispatch({ type: CREATE_ACTIVITY, payload: result.data })
+      );
+  };
 }
 
 export function updatePage(payload) {

@@ -5,15 +5,47 @@ const app = Express();
 const { Op } = require("sequelize");
 const { firstLetterUpperCase } = require("../functions.js");
 
-app.get("/", async (req, res, next) => {
-  const { name } = req.query;
-  console.log(req.query);
+// app.get("/", async (req, res, next) => {
+//   const { name } = req.query;
+//   console.log(req.query);
+//   try {
+//     if (name) {
+//       return Country.findAll({
+//         where: {
+//           name: {
+//             [Op.startsWith]: name.toLowerCase(),
+//           },
+//         },
+//       }).then((result) =>
+//         res.send(
+//           result.slice(0, 10).map((country) => {
+//             country.name = firstLetterUpperCase(country.name);
+//             return country;
+//           })
+//         )
+//       );
+//     }
+//     return Country.findAll().then((result) =>
+//       res.send(
+//         result.slice(0, 10).map((country) => {
+//           country.name = firstLetterUpperCase(country.name);
+//           return country;
+//         })
+//       )
+//     );
+//   } catch (error) {
+//     next(error);
+//   }
+// });
+app.post("/", async (req, res, next) => {
+  // const { name } = req.query;
+  console.log(req.body);
   try {
-    if (name) {
+    if (req.body.name) {
       return Country.findAll({
         where: {
           name: {
-            [Op.startsWith]: name.toLowerCase(),
+            [Op.startsWith]: req.body.name.toLowerCase(),
           },
         },
       }).then((result) =>
@@ -27,7 +59,7 @@ app.get("/", async (req, res, next) => {
     }
     return Country.findAll().then((result) =>
       res.send(
-        result.map((country) => {
+        result.slice(1, 5).map((country) => {
           country.name = firstLetterUpperCase(country.name);
           return country;
         })
