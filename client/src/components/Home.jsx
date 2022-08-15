@@ -17,16 +17,29 @@ import CountryCard from "./country/CountryCard.jsx";
 //   reloadPage,
 // } from "../redux/actions.js";
 import "./Home.css";
+// import { filterActivity, filterContinent } from "../redux/actions.js";
+// import { filterActivity } from "../redux/actions.js";
 
 export default function Home() {
   const [name, setName] = React.useState("");
-  // const [filter, setFilter] = React.useState("");
+  const [continents, setContinents] = React.useState(null);
+  const [state, setState] = React.useState({
+    page: 1,
+  });
+  const [filter, setFilter] = React.useState({});
   const [countriesInput, setCountriesInput] = React.useState([]);
+  const [countries, setCountries] = React.useState([{}]);
 
   // const dispatch = useDispatch();
   React.useEffect(() => {
-    getCountry();
+    getContinent();
   }, []);
+  React.useEffect(() => {
+    getCountry(body);
+  }, [state.page, filter.continent]);
+  // React.useEffect(() => {
+  //   getCountry(body);
+  // }, [state]);
 
   // function paginated(option) {
   //   dispatch(updatePage(option));
@@ -49,12 +62,13 @@ export default function Home() {
 
   // const body = { filter, page };
 
-  const [countries, setCountries] = React.useState([{}]);
-
   function getCountry(body) {
     axios
       .post(`http://localhost:3001/countries`, body)
-      .then((result) => setCountries(result.data))
+      .then((result) => {
+        setState({ ...state, pageTotal: result.data.pageTotal });
+        setCountries(result.data.result);
+      })
       .catch(() => setCountries(null));
   }
 
@@ -63,9 +77,29 @@ export default function Home() {
       .get(`http://localhost:3001/countries/input?name=${name}`)
       .then((result) => setCountriesInput(result.data));
   }
+
+  function getContinent() {
+    // console.log("continent");
+    axios
+      .get("http://localhost:3001/countries/continents")
+      .then((result) => setContinents(result.data));
+    console.log(continents);
+  }
+
+  function paginated(option) {
+    if (option === "prev") setState({ ...state, page: state.page - 1 });
+    else if (option === "next") setState({ ...state, page: state.page + 1 });
+  }
   const body = {
     name: name,
+    page: state.page,
+    continent: filter.continent,
   };
+
+  function filterContinent(continent) {
+    setFilter({ ...filter, continent: continent });
+    console.log(filter);
+  }
   // // const sinredux = prueba
   // console.log(sinredux);
 
@@ -100,8 +134,8 @@ export default function Home() {
           </div>
         ) : null}
       </form>
-      {/* <div className="contenedordesplegable">
-        <div className="desplegabledefault">
+      {/* <div className="contenedordesplegable"> */}
+      {/* <div className="desplegabledefault">
           <button
             className="buttonHome"
             // onClick={() => dispatch(getAllCountries())}
@@ -142,23 +176,16 @@ export default function Home() {
             ))}
           </div>
         </div> */}
-      {/* <div className="desplegable3">
-          <button className="button">continent</button>
-          <div className="link3">
-            {continents.map((continent, index) => (
-              <button
-                key={index}
-                onClick={() => {
-                  dispatch(filterContinent(continent));
-                  // dispatch(countryFilter(body));
-                  prueba(body);
-                }}
-              >
-                {continent}
-              </button>
-            ))}
-          </div>
-        </div> */}
+      <div className="desplegable3">
+        <button className="button">continent</button>
+        <div className="link3">
+          {continents?.map((continent, index) => (
+            <button key={index} onClick={() => filterContinent(continent)}>
+              {continent}
+            </button>
+          ))}
+        </div>
+      </div>
       {/* </div> */}
       <h1>Countries</h1>
       <div className="container">
@@ -176,19 +203,41 @@ export default function Home() {
           <h1>The are no countries to show</h1>
         )}
       </div>
-      {/* <div className="paginated">
-        {page > 1 ? (
-          <button onClick={() => paginated("prev")}>prev</button>
-        ) : null} */}
-      {/*<button style={page==1?{display:'none'}:null}onClick={() => paginated("prev")}>prev</button>*/}
-      {/* <div className="paginatedNum">
-          <div className="pageActual">{page}</div>
-          <div>{`de ${pageTotal}`}</div>
+      <div className="paginated">
+        {state.page > 1 ? (
+          <button
+            onClick={() => {
+              paginated("prev");
+              // getCountry(body);
+            }}
+          >
+            prev
+          </button>
+        ) : null}
+        <button
+          style={state.page === 1 ? { display: "none" } : null}
+          onClick={() => {
+            paginated("prev");
+            // getCountry(body);
+          }}
+        >
+          prev
+        </button>
+        <div className="paginatedNum">
+          <div className="pageActual">{state.page}</div>
+          <div>{`de ${state.pageTotal}`}</div>
         </div>
-        {page < pageTotal ? (
-          <button onClick={() => paginated("next")}>next</button>
-        ) : null} */}
-      {/* </div> */}
+        {state.page < state.pageTotal ? (
+          <button
+            onClick={() => {
+              paginated("next");
+              // getCountry(body);
+            }}
+          >
+            next
+          </button>
+        ) : null}
+      </div>
     </div>
   );
 }

@@ -40,30 +40,36 @@ const { firstLetterUpperCase } = require("../functions.js");
 app.post("/", async (req, res, next) => {
   // const { name } = req.query;
   console.log(req.body);
+  const init = req.body.page * 10 - 10;
+  const end = init + 10;
   try {
     if (req.body.name) {
+      console.log("entre", req.body.name);
       return Country.findAll({
         where: {
           name: {
             [Op.startsWith]: req.body.name.toLowerCase(),
+            // [Op.startsWith]: "c",
           },
         },
       }).then((result) =>
-        res.send(
-          result.map((country) => {
+        res.send({
+          pageTotal: Math.ceil(result.length / 9),
+          result: result.slice(init, end).map((country) => {
             country.name = firstLetterUpperCase(country.name);
             return country;
-          })
-        )
+          }),
+        })
       );
     }
     return Country.findAll().then((result) =>
-      res.send(
-        result.slice(1, 5).map((country) => {
+      res.send({
+        pageTotal: Math.ceil(result.length / 9),
+        result: result.slice(init, end).map((country) => {
           country.name = firstLetterUpperCase(country.name);
           return country;
-        })
-      )
+        }),
+      })
     );
   } catch (error) {
     next(error);
@@ -72,7 +78,7 @@ app.post("/", async (req, res, next) => {
 
 app.get("/input", async (req, res, next) => {
   const { name } = req.query;
-  console.log(req.query);
+  // console.log(req.query);
   try {
     if (name) {
       return Country.findAll({
@@ -124,7 +130,7 @@ app.get("/continents", (req, res, next) => {
     group: ["continent"],
     order: ["continent"],
   })
-    .then((result) => res.send(result))
+    .then((result) => res.send(result.map((element) => element.continent)))
     .catch((error) => next(error));
 });
 
