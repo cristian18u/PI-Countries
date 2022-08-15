@@ -1,24 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React from "react";
 import axios from "axios";
-// import { useSelector, useDispatch } from "react-redux";
 import CountryCard from "./country/CountryCard.jsx";
-// import {
-//   // getAllCountries,
-//   // getCountry,
-//   // getCountryInput,
-//   orderAlphabet,
-//   orderPopulation,
-//   filterContinent,
-//   filterActivity,
-//   countryFilter,
-//   // filterActivity,
-//   updatePage,
-//   reloadPage,
-// } from "../redux/actions.js";
 import "./Home.css";
-// import { filterActivity, filterContinent } from "../redux/actions.js";
-// import { filterActivity } from "../redux/actions.js";
 
 export default function Home() {
   const [name, setName] = React.useState("");
@@ -30,46 +14,39 @@ export default function Home() {
   const [countriesInput, setCountriesInput] = React.useState([]);
   const [countries, setCountries] = React.useState([{}]);
 
-  // const dispatch = useDispatch();
   React.useEffect(() => {
     getContinent();
   }, []);
+
   React.useEffect(() => {
     getCountry(body);
-  }, [state.page, filter.continent]);
-  // React.useEffect(() => {
-  //   getCountry(body);
-  // }, [state]);
-
-  // function paginated(option) {
-  //   dispatch(updatePage(option));
-  //   dispatch(reloadPage());
-  // }
+  }, [
+    state.page,
+    state.nameSearch,
+    filter.continent,
+    filter.activity,
+    filter.orderAlphabet,
+    filter.orderPopulation,
+  ]);
 
   React.useEffect(() => {
+    if (!name) setState({ ...state, nameSearch: undefined });
     if (name) getCountryInput(name);
   }, [name]);
 
-  // const {
-  //   countries,
-  //   countriesInput,
-  //   filter,
-  //   continents,
-  //   activities,
-  //   page,
-  //   pageTotal,
-  // } = useSelector((state) => state);
-
-  // const body = { filter, page };
-
   function getCountry(body) {
+    console.log("disparo action");
+    console.log("body", body);
     axios
       .post(`http://localhost:3001/countries`, body)
       .then((result) => {
         setState({ ...state, pageTotal: result.data.pageTotal });
         setCountries(result.data.result);
       })
-      .catch(() => setCountries(null));
+      .catch(() => {
+        setState({ ...state, pageTotal: 1 });
+        setCountries(null);
+      });
   }
 
   function getCountryInput(name) {
@@ -79,7 +56,6 @@ export default function Home() {
   }
 
   function getContinent() {
-    // console.log("continent");
     axios
       .get("http://localhost:3001/countries/continents")
       .then((result) => setContinents(result.data));
@@ -90,26 +66,56 @@ export default function Home() {
     if (option === "prev") setState({ ...state, page: state.page - 1 });
     else if (option === "next") setState({ ...state, page: state.page + 1 });
   }
-  const body = {
-    name: name,
-    page: state.page,
-    continent: filter.continent,
-  };
 
   function filterContinent(continent) {
     setFilter({ ...filter, continent: continent });
+    setState({ ...state, page: 1 });
     console.log(filter);
   }
-  // // const sinredux = prueba
-  // console.log(sinredux);
+
+  function filterActivity(activity) {
+    setFilter({ ...filter, activity: activity });
+    setState({ ...state, page: 1 });
+    console.log("activity", filter);
+  }
+
+  function order(option) {
+    if (!option) {
+      console.log("opti", option);
+      setFilter({ ...filter, orderAlphabet: option, orderPopulation: option });
+    } else if (option === "az" || option === "za") {
+      setFilter({
+        ...filter,
+        orderAlphabet: option,
+        orderPopulation: undefined,
+      });
+    } else if (option === "asc" || option === "desc") {
+      setFilter({
+        ...filter,
+        orderPopulation: option,
+        orderAlphabet: undefined,
+      });
+    }
+    setState({ ...state, page: 1 });
+  }
+  const activities = ["solfege", "Cantal"];
+
+  const body = {
+    name: state.nameSearch,
+    page: state.page,
+    continent: filter.continent,
+    activity: filter.activity,
+    orderAlphabet: filter.orderAlphabet,
+    orderPopulation: filter.orderPopulation,
+  };
 
   return (
     <div>
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          getCountry(body);
-          setName("");
+          setState({ ...state, page: 1, pageTotal: 1, nameSearch: name });
+          setFilter({});
         }}
       >
         <input
@@ -134,59 +140,47 @@ export default function Home() {
           </div>
         ) : null}
       </form>
-      {/* <div className="contenedordesplegable"> */}
-      {/* <div className="desplegabledefault">
-          <button
-            className="buttonHome"
-            // onClick={() => dispatch(getAllCountries())}
-          >
-            todos
-          </button>
-        </div> */}
-      {/* <div className="desplegable">
+      <div className="contenedordesplegable">
+        <div className="desplegabledefault"></div>
+        <div className="desplegable">
           <button className="button">A-Z</button>
           <div className="link">
-            <button onClick={() => dispatch(orderAlphabet("nameAsc"))}>
-              Or A-Z
-            </button>
-            <button onClick={() => dispatch(orderAlphabet("nameDes"))}>
-              Or Z-A
-            </button>
-            <button onClick={() => dispatch(orderPopulation("populationAsc"))}>
-              Pasc
-            </button>
-            <button onClick={() => dispatch(orderPopulation("populationDes"))}>
-              Pdsc
-            </button>
+            <button onClick={() => order()}>--select--</button>
+            <button onClick={() => order("az")}>Or A-Z</button>
+            <button onClick={() => order("za")}>Or Z-A</button>
+            <button onClick={() => order("asc")}>Pasc</button>
+            <button onClick={() => order("desc")}>Pdsc</button>
           </div>
-        </div> */}
-      {/* <div className="desplegable2">
+        </div>
+        <div className="desplegable2">
           <button className="button">activity touristic</button>
           <div className="link2">
+            <button onClick={() => filterActivity()}>--select--</button>
             {activities.map((activity, index) => (
               <button
                 key={index}
                 onClick={() => {
-                  dispatch(filterActivity(activity));
-                  dispatch(countryFilter(body));
+                  filterActivity(activity);
+                  // dispatch(countryFilter(body));
                 }}
               >
                 {activity}
               </button>
             ))}
           </div>
-        </div> */}
-      <div className="desplegable3">
-        <button className="button">continent</button>
-        <div className="link3">
-          {continents?.map((continent, index) => (
-            <button key={index} onClick={() => filterContinent(continent)}>
-              {continent}
-            </button>
-          ))}
+        </div>
+        <div className="desplegable3">
+          <button className="button">continent</button>
+          <div className="link3">
+            <button onClick={() => filterContinent()}>--select--</button>
+            {continents?.map((continent, index) => (
+              <button key={index} onClick={() => filterContinent(continent)}>
+                {continent}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
-      {/* </div> */}
       <h1>Countries</h1>
       <div className="container">
         {countries ? (

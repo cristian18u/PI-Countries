@@ -5,72 +5,249 @@ const app = Express();
 const { Op } = require("sequelize");
 const { firstLetterUpperCase } = require("../functions.js");
 
-// app.get("/", async (req, res, next) => {
-//   const { name } = req.query;
-//   console.log(req.query);
-//   try {
-//     if (name) {
-//       return Country.findAll({
-//         where: {
-//           name: {
-//             [Op.startsWith]: name.toLowerCase(),
-//           },
-//         },
-//       }).then((result) =>
-//         res.send(
-//           result.slice(0, 10).map((country) => {
-//             country.name = firstLetterUpperCase(country.name);
-//             return country;
-//           })
-//         )
-//       );
-//     }
-//     return Country.findAll().then((result) =>
-//       res.send(
-//         result.slice(0, 10).map((country) => {
-//           country.name = firstLetterUpperCase(country.name);
-//           return country;
-//         })
-//       )
-//     );
-//   } catch (error) {
-//     next(error);
-//   }
-// });
-app.post("/", async (req, res, next) => {
-  // const { name } = req.query;
-  console.log(req.body);
-  const init = req.body.page * 10 - 10;
-  const end = init + 10;
+app.get("/", async (req, res, next) => {
+  const { name } = req.query;
+  console.log(req.query);
   try {
-    if (req.body.name) {
-      console.log("entre", req.body.name);
+    if (name) {
       return Country.findAll({
         where: {
           name: {
-            [Op.startsWith]: req.body.name.toLowerCase(),
-            // [Op.startsWith]: "c",
+            [Op.startsWith]: name.toLowerCase(),
           },
         },
       }).then((result) =>
-        res.send({
-          pageTotal: Math.ceil(result.length / 9),
-          result: result.slice(init, end).map((country) => {
+        res.send(
+          result.slice(0, 9).map((country) => {
             country.name = firstLetterUpperCase(country.name);
             return country;
-          }),
-        })
+          })
+        )
       );
     }
-    return Country.findAll().then((result) =>
-      res.send({
-        pageTotal: Math.ceil(result.length / 9),
-        result: result.slice(init, end).map((country) => {
-          country.name = firstLetterUpperCase(country.name);
-          return country;
-        }),
-      })
-    );
+    // return Country.findAll().then((result) =>
+    //   res.send(
+    //     result.slice(0, 10).map((country) => {
+    //       country.name = firstLetterUpperCase(country.name);
+    //       return country;
+    //     })
+    //   )
+    // );
+  } catch (error) {
+    next(error);
+  }
+});
+app.post("/", async (req, res, next) => {
+  // const { name } = req.query;
+  console.log(req.body);
+  const init = req.body.page * 9 - 9;
+  const end = init + 9;
+  const { continent, activity, orderAlphabet, orderPopulation, name } =
+    req.body;
+  let order = false;
+  if (orderAlphabet || orderPopulation) order = true;
+  try {
+    // if (req.body.sname) {
+    //   console.log("entre", req.body.name);
+    //   return Country.findAll({
+    //     where: {
+    //       name: {
+    //         [Op.startsWith]: req.body.name.toLowerCase(),
+    //         // [Op.startsWith]: "c",
+    //       },
+    //     },
+    //   }).then((result) =>
+    //     res.send({
+    //       pageTotal: Math.ceil(result.length / 9),
+    //       result: result.slice(init, end).map((country) => {
+    //         country.name = firstLetterUpperCase(country.name);
+    //         return country;
+    //       }),
+    //     })
+    //   );
+    // }
+    // return Country.findAll({
+    //   where: {
+    //     if (continent) continent: "Africa",
+    //   },
+    // }).then((result) =>
+    //   res.send({
+    //     pageTotal: Math.ceil(result.length / 9),
+    //     result: result.slice(init, end).map((country) => {
+    //       country.name = firstLetterUpperCase(country.name);
+    //       return country;
+    //     }),
+    //   })
+    // );
+    let result = [];
+    if (continent && activity && order) {
+      if (orderAlphabet && orderAlphabet === "az") {
+        result = await Country.findAll({
+          where: {
+            continent,
+          },
+          include: {
+            model: Activity,
+            where: { activity },
+            attributes: [],
+          },
+          order: ["name"],
+        });
+      } else if (orderAlphabet && orderAlphabet === "za") {
+        result = await Country.findAll({
+          where: {
+            continent,
+          },
+          include: {
+            model: Activity,
+            where: { activity },
+            attributes: [],
+          },
+          order: [["name", "DESC"]],
+        });
+      } else if (orderPopulation && orderPopulation === "asc") {
+        result = await Country.findAll({
+          where: {
+            continent,
+          },
+          include: {
+            model: Activity,
+            where: { activity },
+            attributes: [],
+          },
+          order: ["population"],
+        });
+      } else if (orderPopulation && orderPopulation === "desc") {
+        result = await Country.findAll({
+          where: {
+            continent,
+          },
+          include: {
+            model: Activity,
+            where: { activity },
+            attributes: [],
+          },
+          order: [["population", "DESC"]],
+        });
+      }
+    } else if (continent && activity) {
+      result = await Country.findAll({
+        where: {
+          continent,
+        },
+        include: {
+          model: Activity,
+          where: { activity },
+          attributes: [],
+        },
+      });
+    } else if (continent && order) {
+      if (orderAlphabet && orderAlphabet === "az") {
+        result = await Country.findAll({
+          where: {
+            continent,
+          },
+          order: ["name"],
+        });
+      } else if (orderAlphabet && orderAlphabet === "za") {
+        result = await Country.findAll({
+          where: {
+            continent,
+          },
+          order: [["name", "DESC"]],
+        });
+      } else if (orderPopulation && orderPopulation === "asc") {
+        result = await Country.findAll({
+          where: {
+            continent,
+          },
+          order: ["population"],
+        });
+      } else if (orderPopulation && orderPopulation === "desc") {
+        result = await Country.findAll({
+          where: {
+            continent,
+          },
+          order: [["population", "DESC"]],
+        });
+      }
+    } else if (continent) {
+      result = await Country.findAll({
+        where: {
+          continent,
+        },
+      });
+    } else if (activity && order) {
+      if (orderAlphabet && orderAlphabet === "az") {
+        result = await Country.findAll({
+          where: {
+            activity,
+          },
+          order: ["name"],
+        });
+      } else if (orderAlphabet && orderAlphabet === "za") {
+        result = await Country.findAll({
+          where: {
+            activity,
+          },
+          order: [["name", "DESC"]],
+        });
+      } else if (orderPopulation && orderPopulation === "asc") {
+        result = await Country.findAll({
+          where: {
+            activity,
+          },
+          order: ["population"],
+        });
+      } else if (orderPopulation && orderPopulation === "desc") {
+        result = await Country.findAll({
+          where: {
+            activity,
+          },
+          order: [["population", "DESC"]],
+        });
+      }
+    } else if (activity) {
+      result = await Country.findAll({
+        where: {
+          activity,
+        },
+      });
+    } else if (order) {
+      if (orderAlphabet && orderAlphabet === "az") {
+        result = await Country.findAll({
+          order: ["name"],
+        });
+      } else if (orderAlphabet && orderAlphabet === "za") {
+        result = await Country.findAll({
+          order: [["name", "DESC"]],
+        });
+      } else if (orderPopulation && orderPopulation === "asc") {
+        result = await Country.findAll({
+          order: ["name"],
+        });
+      } else if (orderPopulation && orderPopulation === "desc") {
+        result = await Country.findAll({
+          order: [["name", "DESC"]],
+        });
+      }
+    } else if (name) {
+      console.log("entrename", name);
+      result = await Country.findAll({
+        where: {
+          name: {
+            [Op.startsWith]: name.toLowerCase(),
+          },
+        },
+      });
+    } else result = await Country.findAll();
+    res.send({
+      pageTotal: Math.ceil(result.length / 9),
+      result: result.slice(init, end).map((country) => {
+        country.name = firstLetterUpperCase(country.name);
+        return country;
+      }),
+    });
   } catch (error) {
     next(error);
   }
@@ -99,6 +276,35 @@ app.get("/input", async (req, res, next) => {
     next(error);
   }
 });
+
+// app.get("/prueba", async (req, res, next) => {
+//   // const { name } = req.query;
+//   // console.log(req.query);
+//   try {
+//     // if (name) {
+//     //   return Country.findAll({
+//     //     where: {
+//     //       name: {
+//     //         [Op.startsWith]: name.toLowerCase(),
+//     //       },
+//     //     },
+//     //   }).then((result) =>
+//     //     res.send(
+//     //       result
+//     //         .slice(0, 5)
+//     //         .map((element) => firstLetterUpperCase(element.name))
+//     //     )
+//     //   );
+//     // }
+//     Country.findAll({
+//       where: {
+//         continent: "Africa",
+//       },
+//     }).then((result) => res.send(result.slice(0, 10)));
+//   } catch (error) {
+//     next(error);
+//   }
+// });
 
 app.get("/order", (req, res, next) => {
   const { order } = req.query;
