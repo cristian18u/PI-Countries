@@ -88,7 +88,7 @@ app.post("/", async (req, res, next) => {
           },
           include: {
             model: Activity,
-            where: { activity },
+            where: { name: activity.toLowerCase() },
             attributes: [],
           },
           order: ["name"],
@@ -100,7 +100,7 @@ app.post("/", async (req, res, next) => {
           },
           include: {
             model: Activity,
-            where: { activity },
+            where: { name: activity.toLowerCase() },
             attributes: [],
           },
           order: [["name", "DESC"]],
@@ -112,7 +112,7 @@ app.post("/", async (req, res, next) => {
           },
           include: {
             model: Activity,
-            where: { activity },
+            where: { name: activity.toLowerCase() },
             attributes: [],
           },
           order: ["population"],
@@ -124,7 +124,7 @@ app.post("/", async (req, res, next) => {
           },
           include: {
             model: Activity,
-            where: { activity },
+            where: { name: activity.toLowerCase() },
             attributes: [],
           },
           order: [["population", "DESC"]],
@@ -137,7 +137,7 @@ app.post("/", async (req, res, next) => {
         },
         include: {
           model: Activity,
-          where: { activity },
+          where: { name: activity.toLowerCase() },
           attributes: [],
         },
       });
@@ -180,37 +180,47 @@ app.post("/", async (req, res, next) => {
     } else if (activity && order) {
       if (orderAlphabet && orderAlphabet === "az") {
         result = await Country.findAll({
-          where: {
-            activity,
+          include: {
+            model: Activity,
+            where: { name: activity.toLowerCase() },
+            attributes: [],
           },
           order: ["name"],
         });
       } else if (orderAlphabet && orderAlphabet === "za") {
         result = await Country.findAll({
-          where: {
-            activity,
+          include: {
+            model: Activity,
+            where: { name: activity.toLowerCase() },
+            attributes: [],
           },
           order: [["name", "DESC"]],
         });
       } else if (orderPopulation && orderPopulation === "asc") {
         result = await Country.findAll({
-          where: {
-            activity,
+          include: {
+            model: Activity,
+            where: { name: activity.toLowerCase() },
+            attributes: [],
           },
           order: ["population"],
         });
       } else if (orderPopulation && orderPopulation === "desc") {
         result = await Country.findAll({
-          where: {
-            activity,
+          include: {
+            model: Activity,
+            where: { name: activity.toLowerCase() },
+            attributes: [],
           },
           order: [["population", "DESC"]],
         });
       }
     } else if (activity) {
       result = await Country.findAll({
-        where: {
-          activity,
+        include: {
+          model: Activity,
+          where: { name: activity.toLowerCase() },
+          attributes: [],
         },
       });
     } else if (order) {
@@ -255,7 +265,7 @@ app.post("/", async (req, res, next) => {
 
 app.get("/input", async (req, res, next) => {
   const { name } = req.query;
-  // console.log(req.query);
+  console.log(req.query);
   try {
     if (name) {
       return Country.findAll({

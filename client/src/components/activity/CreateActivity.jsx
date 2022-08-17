@@ -1,14 +1,15 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+import axios from "axios";
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  createActivity,
-  filterNameCountry,
-  addCountry,
-  deleteAddedCountry,
-} from "../../redux/actions.js";
+// import { useDispatch, useSelector } from "react-redux";
+// import {
+//   createActivity,
+//   filterNameCountry,
+//   addCountry,
+//   deleteAddedCountry,
+// } from "../../redux/actions.js";
 import "./CreateActivity.css";
-import validationForm from './ModuleFunction'
+import validationForm from "./ModuleFunction";
 
 export default function CreateActivity() {
   const [input, setInput] = React.useState({
@@ -26,11 +27,22 @@ export default function CreateActivity() {
     season: "",
   });
 
-  const { nameCountries, addedCountries, activities } = useSelector(
-    (state) => state
-  );
+  const [state, setState] = React.useState({ addedCountries: [] });
 
-  const dispatch = useDispatch();
+  React.useEffect(() => {
+    setError(validationForm(input, state.addedCountries, activities));
+    if (input.nameCountryInput) getNameCountry(input.nameCountryInput);
+    console.log(state.countries);
+  }, [input, state.addedCountries]);
+
+  const activities = ["wolfer", "bailor"];
+  const body = {
+    name: input.name,
+    difficulty: input.difficulty,
+    duration: input.duration,
+    season: input.season,
+    countries: state.addedCountries,
+  };
 
   function handleChange(event) {
     const { name, value } = event.target;
@@ -40,16 +52,15 @@ export default function CreateActivity() {
     });
   }
 
-  React.useEffect(() => {
-    setError(validationForm(input, addedCountries, activities));
-    if (input.nameCountryInput)
-      dispatch(filterNameCountry(input.nameCountryInput));
-  }, [input, addedCountries]);
+  function getNameCountry(name) {
+    axios
+      .get(`http://localhost:3001/countries/input?name=${name}`)
+      .then((result) => setState({ ...state, countries: result.data }));
+  }
 
   function handleSubmit(event) {
     event.preventDefault();
-    input.country = addedCountries;
-    dispatch(createActivity(input));
+    createActivity(body);
     setInput({
       name: "",
       difficulty: "",
@@ -57,9 +68,33 @@ export default function CreateActivity() {
       season: "",
       nameCountryInput: "",
     });
+    setState({ ...state, addedCountries: [] });
     setTimeout(function () {
       alert("Tourist activity added successfully");
     }, 1500);
+  }
+
+  function createActivity(body) {
+    console.log("body", body);
+    axios.post("http://localhost:3001/activity", body).then((result) => result);
+  }
+
+  function addCountry(country) {
+    if (!state.addedCountries.find((element) => element === country)) {
+      setState({
+        ...state,
+        addedCountries: [...state.addedCountries, country],
+      });
+    }
+  }
+
+  function deleteAddedCountry(country) {
+    setState({
+      ...state,
+      addedCountries: state.addedCountries.filter(
+        (element) => element !== country
+      ),
+    });
   }
 
   return (
@@ -73,7 +108,7 @@ export default function CreateActivity() {
             value={input.name}
             onChange={handleChange}
           />
-          {error.name && input.name ? <span >{error.name}</span> : null}
+          {error.name && input.name ? <span>{error.name}</span> : null}
           <label>difficulty</label>
           <input
             type="number"
@@ -119,12 +154,9 @@ export default function CreateActivity() {
         />
         {input.nameCountryInput ? (
           <div className="containerNameCountries">
-            {nameCountries ? (
-              nameCountries.map((country, index) => (
-                <button
-                  key={index}
-                  onClick={() => dispatch(addCountry(country))}
-                >
+            {state.countries ? (
+              state.countries.map((country, index) => (
+                <button key={index} onClick={() => addCountry(country)}>
                   {country}
                 </button>
               ))
@@ -135,12 +167,10 @@ export default function CreateActivity() {
         ) : null}
       </div>
       <div className="addCountry">
-        {addedCountries?.map((country, index) => (
+        {state.addedCountries?.map((country, index) => (
           <div key={index} className="deleteAddedCountries">
             <div>{country}</div>
-            <button onClick={() => dispatch(deleteAddedCountry(country))}>
-              X
-            </button>
+            <button onClick={() => deleteAddedCountry(country)}>X</button>
           </div>
         ))}
       </div>

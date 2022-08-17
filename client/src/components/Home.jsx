@@ -2,11 +2,12 @@
 import React from "react";
 import axios from "axios";
 import CountryCard from "./country/CountryCard.jsx";
-import "./Home.css";
+import c from "./Home.module.css";
 
 export default function Home() {
   const [name, setName] = React.useState("");
-  const [continents, setContinents] = React.useState(null);
+  const [continents, setContinents] = React.useState([]);
+  const [activities, setActivities] = React.useState([]);
   const [state, setState] = React.useState({
     page: 1,
   });
@@ -14,12 +15,23 @@ export default function Home() {
   const [countriesInput, setCountriesInput] = React.useState([]);
   const [countries, setCountries] = React.useState([{}]);
 
+  const body = {
+    name: state.nameSearch,
+    page: state.page,
+    continent: filter.continent,
+    activity: filter.activity,
+    orderAlphabet: filter.orderAlphabet,
+    orderPopulation: filter.orderPopulation,
+  };
+
   React.useEffect(() => {
     getContinent();
+    getActivity();
   }, []);
 
   React.useEffect(() => {
     getCountry(body);
+    console.log("static", continents, activities);
   }, [
     state.page,
     state.nameSearch,
@@ -58,8 +70,20 @@ export default function Home() {
   function getContinent() {
     axios
       .get("http://localhost:3001/countries/continents")
+      // .then((result) => {
+      //   console.log("fetch", result.data);
+      // setFlat({ nara: [4], activities: [] });
+      // });
       .then((result) => setContinents(result.data));
-    console.log(continents);
+
+    console.log("continent", continents);
+  }
+
+  function getActivity() {
+    axios
+      .get("http://localhost:3001/activity/all")
+      .then((result) => setActivities(result.data));
+    console.log("activity", activities);
   }
 
   function paginated(option) {
@@ -98,19 +122,9 @@ export default function Home() {
     }
     setState({ ...state, page: 1 });
   }
-  const activities = ["solfege", "Cantal"];
-
-  const body = {
-    name: state.nameSearch,
-    page: state.page,
-    continent: filter.continent,
-    activity: filter.activity,
-    orderAlphabet: filter.orderAlphabet,
-    orderPopulation: filter.orderPopulation,
-  };
 
   return (
-    <div>
+    <div className={c.container}>
       <form
         onSubmit={(e) => {
           e.preventDefault();
@@ -161,7 +175,6 @@ export default function Home() {
                 key={index}
                 onClick={() => {
                   filterActivity(activity);
-                  // dispatch(countryFilter(body));
                 }}
               >
                 {activity}
@@ -182,7 +195,7 @@ export default function Home() {
         </div>
       </div>
       <h1>Countries</h1>
-      <div className="container">
+      <div className={c.containerCard}>
         {countries ? (
           countries.map((country, index) => (
             <CountryCard

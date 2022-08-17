@@ -1,5 +1,6 @@
 const Express = require("express");
 const { Activity, Country } = require("../db.js");
+const { firstLetterUpperCase } = require("../functions.js");
 const app = Express();
 
 app.get("/all", (req, res, next) => {
@@ -7,7 +8,9 @@ app.get("/all", (req, res, next) => {
     attributes: ["name"],
     order: ["name"],
   })
-    .then((result) => res.send(result))
+    .then((result) =>
+      res.send(result.map((activity) => firstLetterUpperCase(activity.name)))
+    )
     .catch((error) => next(error));
 });
 
@@ -25,11 +28,12 @@ app.get("/filter", (req, res, next) => {
 });
 
 app.post("/", async (req, res, next) => {
-  const { country, name, difficulty, duration, season } = req.body;
+  console.log("activity create", req.body);
+  const { countries, name, difficulty, duration, season } = req.body;
 
   try {
     await Activity.create({
-      name,
+      name: name.toLowerCase(),
       difficulty,
       duration,
       season,
@@ -39,9 +43,9 @@ app.post("/", async (req, res, next) => {
       where: { name },
     });
 
-    country.map(async (country) => {
+    countries.map(async (country) => {
       const countryDb = await Country.findOne({
-        where: { name: country },
+        where: { name: country.toLowerCase() },
       });
       await countryDb.addActivity(activityDb);
     });
@@ -95,18 +99,18 @@ module.exports = app;
 
 // esta era para probar el filtro
 
-// app.get('/', async (req, res) => {
-//   // const {country, name, difficulty, duration, season} = req.body
-//   const activity = await Activity.findAll({
-//     include:{
-//     model: Country,
-//     where: {ID: 'COL'},
-//     attributes:[]
-//   },
-// })
-//   console.log(activity);
-//   res.send(activity)
-// })
+app.get("/prueba", async (req, res) => {
+  // const {country, name, difficulty, duration, season} = req.body
+  const activity = await Activity.findAll({
+    include: {
+      model: Country,
+      where: { id: "COL" },
+      attributes: [],
+    },
+  });
+  console.log(activity);
+  res.send(activity);
+});
 
 // Payment.findAll({
 //     where: {
