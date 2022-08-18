@@ -2,10 +2,21 @@
   /* display: flex;
   flex-wrap: wrap;
   justify-content: space-around; */
+  display: flex;
+  /* justify-content: center; */
+  align-items: center;
+  flex-direction: column;
+}
+.searchFilter {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
 }
 
 .containerCard {
-  width: 80%;
+  width: 75%;
+  /* padding-top: 40 px; */
+  padding-top: 40px;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
   grid-column-gap: 60px;
@@ -13,12 +24,42 @@
   /* justify-items: stretch; */
   /* align-items: stretch; */
 }
-.contenedordesplegable {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: right;
+.input {
+  height: 28px;
+  width: 35%;
 }
-
+.search {
+  height: 28px;
+}
+.filter {
+  width: 500px;
+  display: flex;
+  justify-content: space-around;
+}
+.containerPaginate {
+  height: 100px;
+  display: flex;
+  align-items: center;
+}
+.paginate {
+  display: flex;
+  justify-content: space-around;
+  width: 160px;
+}
+.num {
+  display: flex;
+  justify-content: space-between;
+  width: 70px;
+  align-items: center;
+}
+.numActual {
+  border: 2px solid red;
+  width: 25px;
+  display: flex;
+  justify-content: center;
+  /* height: 30px; */
+}
+/* 
 .buttonHome {
   background-color: #456789;
   width: 80px;
@@ -36,29 +77,20 @@
   padding: 5px;
   font-size: 10px;
   cursor: pointer;
-}
+} */
 
-.link button {
+/* .link button {
   color: black;
-  /*display: block;*/
   font-size: 10px;
   padding: 5px;
   width: 80px;
-  /*border: none;*/
-  /*padding: 5px;*/
-  /*font-size: 10px;*/
-  /*cursor: pointer;*/
 }
 .link2 button {
-  /*color: black;*/
-  /*display: block;*/
   font-size: 10px;
   padding: 5px;
   width: 80px;
 }
 .link3 button {
-  /*color: black;*/
-  /*display: block;*/
   font-size: 10px;
   padding: 5px;
   width: 80px;
@@ -121,49 +153,7 @@
 }
 
 .pageActual {
-  /*background-color: yellow;*/
   width: 20px;
-  /*height: 20px;*/
-  /*color: blue;*/
   border: 2px solid blue;
   text-align: center;
-}
-/*.desplegable{
-  position: static;
-}*/
-/*
-.link2 button{
- /* text-decoration: none;
-  color: black;*/
-/*display: block;*/
-/*  font-size: 10px;
-  padding: 5px;*/
-/*}*/
-
-/*.link2{
-  background-color: #f9f9f9;
-  width: 5px;
-  display: none;
-}
-*/
-/*.link2 button:hover{*/
-/*background-color: #f1f1f1;*/
-/*}*/
-/**/
-/*.desplegable2:hover .link{
-  display: block;
-}*/
-
-/*.desplegable2{
-  position: absolute;
-}*/
-
-/*.button2 {
-  background-color: #456789;
-  width: 100px;
-  color: white;
-  border: none;
-  padding: 5px;
-  font-size: 10px;
-  cursor: pointer;
-}*/
+} */

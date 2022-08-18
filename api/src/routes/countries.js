@@ -18,7 +18,7 @@ app.get("/", async (req, res, next) => {
         },
       }).then((result) =>
         res.send(
-          result.slice(0, 9).map((country) => {
+          result.slice(0, 5).map((country) => {
             country.name = firstLetterUpperCase(country.name);
             return country;
           })
@@ -40,8 +40,8 @@ app.get("/", async (req, res, next) => {
 app.post("/", async (req, res, next) => {
   // const { name } = req.query;
   console.log(req.body);
-  const init = req.body.page * 9 - 9;
-  const end = init + 9;
+  const init = req.body.page * 12 - 12;
+  const end = init + 12;
   const { continent, activity, orderAlphabet, orderPopulation, name } =
     req.body;
   let order = false;
@@ -252,7 +252,7 @@ app.post("/", async (req, res, next) => {
       });
     } else result = await Country.findAll();
     res.send({
-      pageTotal: Math.ceil(result.length / 9),
+      pageTotal: Math.ceil(result.length / 12),
       result: result.slice(init, end).map((country) => {
         country.name = firstLetterUpperCase(country.name);
         return country;

@@ -47,8 +47,6 @@ export default function Home() {
   }, [name]);
 
   function getCountry(body) {
-    console.log("disparo action");
-    console.log("body", body);
     axios
       .post(`http://localhost:3001/countries`, body)
       .then((result) => {
@@ -70,10 +68,6 @@ export default function Home() {
   function getContinent() {
     axios
       .get("http://localhost:3001/countries/continents")
-      // .then((result) => {
-      //   console.log("fetch", result.data);
-      // setFlat({ nara: [4], activities: [] });
-      // });
       .then((result) => setContinents(result.data));
 
     console.log("continent", continents);
@@ -91,32 +85,39 @@ export default function Home() {
     else if (option === "next") setState({ ...state, page: state.page + 1 });
   }
 
-  function filterContinent(continent) {
-    setFilter({ ...filter, continent: continent });
+  function filterContinent(e) {
+    if (e.target.value === "select")
+      setFilter({ ...filter, continent: undefined });
+    else setFilter({ ...filter, continent: e.target.value });
     setState({ ...state, page: 1 });
     console.log(filter);
   }
 
-  function filterActivity(activity) {
-    setFilter({ ...filter, activity: activity });
+  function filterActivity(e) {
+    if (e.target.value === "select")
+      setFilter({ ...filter, activity: undefined });
+    else setFilter({ ...filter, activity: e.target.value });
     setState({ ...state, page: 1 });
     console.log("activity", filter);
   }
 
-  function order(option) {
-    if (!option) {
-      console.log("opti", option);
-      setFilter({ ...filter, orderAlphabet: option, orderPopulation: option });
-    } else if (option === "az" || option === "za") {
+  function order(e) {
+    if (e.target.value === "select") {
       setFilter({
         ...filter,
-        orderAlphabet: option,
+        orderAlphabet: undefined,
         orderPopulation: undefined,
       });
-    } else if (option === "asc" || option === "desc") {
+    } else if (e.target.value === "az" || e.target.value === "za") {
       setFilter({
         ...filter,
-        orderPopulation: option,
+        orderAlphabet: e.target.value,
+        orderPopulation: undefined,
+      });
+    } else if (e.target.value === "asc" || e.target.value === "desc") {
+      setFilter({
+        ...filter,
+        orderPopulation: e.target.value,
         orderAlphabet: undefined,
       });
     }
@@ -125,76 +126,73 @@ export default function Home() {
 
   return (
     <div className={c.container}>
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          setState({ ...state, page: 1, pageTotal: 1, nameSearch: name });
-          setFilter({});
-        }}
-      >
-        <input
-          type="text"
-          placeholder="Country..."
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
-        <input type="submit" value="Buscar" />
-        {name ? (
-          <div className="containerInput">
-            {countriesInput?.map((country, index) => (
-              <button
-                key={index}
-                onClick={() => {
-                  setName(country);
-                }}
-              >
-                {country}
-              </button>
-            ))}
+      <div className={c.searchFilter}>
+        <form
+          className={c.input}
+          onSubmit={(e) => {
+            e.preventDefault();
+            setState({ ...state, page: 1, pageTotal: 1, nameSearch: name });
+            setFilter({});
+          }}
+        >
+          <input
+            className={c.input}
+            type="text"
+            placeholder="Country..."
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
+          <input className={c.search} type="submit" value="Search" />
+          {name ? (
+            <div className={c.suggest}>
+              {countriesInput?.map((country, index) => (
+                <button
+                  key={index}
+                  onClick={() => {
+                    setName(country);
+                  }}
+                >
+                  {country}
+                </button>
+              ))}
+            </div>
+          ) : null}
+        </form>
+        <div className={c.filter}>
+          <div>
+            <label className="label">Order for:</label>
+            <select className="link" onChange={order}>
+              <option value="select">--Select--</option>
+              <optgroup label="Alphabet">
+                <option value="az">A-Z</option>
+                <option value="za">Z-A</option>
+              </optgroup>
+              <optgroup label="Population">
+                <option value="asc">ASC</option>
+                <option value="desc">DESC</option>
+              </optgroup>
+            </select>
           </div>
-        ) : null}
-      </form>
-      <div className="contenedordesplegable">
-        <div className="desplegabledefault"></div>
-        <div className="desplegable">
-          <button className="button">A-Z</button>
-          <div className="link">
-            <button onClick={() => order()}>--select--</button>
-            <button onClick={() => order("az")}>Or A-Z</button>
-            <button onClick={() => order("za")}>Or Z-A</button>
-            <button onClick={() => order("asc")}>Pasc</button>
-            <button onClick={() => order("desc")}>Pdsc</button>
+          <div>
+            <label className="label">Activity</label>
+            <select className="link2" onChange={filterActivity}>
+              <option value="select">--Select--</option>
+              {activities.map((activity, index) => (
+                <option key={index}>{activity}</option>
+              ))}
+            </select>
           </div>
-        </div>
-        <div className="desplegable2">
-          <button className="button">activity touristic</button>
-          <div className="link2">
-            <button onClick={() => filterActivity()}>--select--</button>
-            {activities.map((activity, index) => (
-              <button
-                key={index}
-                onClick={() => {
-                  filterActivity(activity);
-                }}
-              >
-                {activity}
-              </button>
-            ))}
-          </div>
-        </div>
-        <div className="desplegable3">
-          <button className="button">continent</button>
-          <div className="link3">
-            <button onClick={() => filterContinent()}>--select--</button>
-            {continents?.map((continent, index) => (
-              <button key={index} onClick={() => filterContinent(continent)}>
-                {continent}
-              </button>
-            ))}
+          <div>
+            <label className="label">Continent</label>
+            <select className="link3" onChange={filterContinent}>
+              <option value="select">--Select--</option>
+              {continents?.map((continent, index) => (
+                <option key={index}>{continent}</option>
+              ))}
+            </select>
           </div>
         </div>
       </div>
-      <h1>Countries</h1>
       <div className={c.containerCard}>
         {countries ? (
           countries.map((country, index) => (
@@ -210,40 +208,29 @@ export default function Home() {
           <h1>The are no countries to show</h1>
         )}
       </div>
-      <div className="paginated">
-        {state.page > 1 ? (
+      <div className={c.containerPaginate}>
+        <div className={c.paginate}>
           <button
+            disabled={state.page === 1 ? true : false}
             onClick={() => {
               paginated("prev");
-              // getCountry(body);
             }}
           >
-            prev
+            {"<"}
           </button>
-        ) : null}
-        <button
-          style={state.page === 1 ? { display: "none" } : null}
-          onClick={() => {
-            paginated("prev");
-            // getCountry(body);
-          }}
-        >
-          prev
-        </button>
-        <div className="paginatedNum">
-          <div className="pageActual">{state.page}</div>
-          <div>{`de ${state.pageTotal}`}</div>
-        </div>
-        {state.page < state.pageTotal ? (
+          <div className={c.num}>
+            <div className={c.numActual}>{state.page}</div>
+            <div>{`de ${state.pageTotal}`}</div>
+          </div>
           <button
+            disabled={state.page === state.pageTotal ? true : false}
             onClick={() => {
               paginated("next");
-              // getCountry(body);
             }}
           >
-            next
+            {">"}
           </button>
-        ) : null}
+        </div>
       </div>
     </div>
   );
