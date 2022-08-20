@@ -1,14 +1,14 @@
-// function firstLetterUpperCase(sentence) {
-//   let word = sentence
-//     .toLowerCase()
-//     .split(" ")
-//     .map((word) => {
-//       return word[0].toUpperCase() + word.slice(1);
-//     });
-//   return word.join(" ");
-// }
+// /* eslint-disable react-hooks/rules-of-hooks */
 
-export default function validationForm(input, addedCountries, activities) {
+export function resetSelect() {
+  if (document.getElementById("order")) {
+    document.getElementById("order").selectedIndex = 0;
+    document.getElementById("continent").selectedIndex = 0;
+    document.getElementById("activity").selectedIndex = 0;
+  }
+}
+
+export function validationForm(input, addedCountries, activities) {
   let error = {};
   const season = ["summer", "autumn", "winter", "spring"];
 
@@ -22,14 +22,6 @@ export default function validationForm(input, addedCountries, activities) {
   });
 
   if (input.name.split(" ").length > 4) error.name = "exceed the woed limit";
-
-  // if (input.name[input.name.length - 1] === " ")
-  //   error.name = "the last character is a space";
-
-  // if (input.name && input.name[input.name.length - 1] !== " ") {
-  //   if (firstLetterUpperCase(input.name) !== input.name)
-  //     error.name = "first letter UpperCase the rest in LowerCase";
-  // }
 
   if (!(input.difficulty >= 1 && input.difficulty <= 5))
     error.difficulty = "difficulty out of range";

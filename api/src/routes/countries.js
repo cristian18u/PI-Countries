@@ -5,41 +5,39 @@ const app = Express();
 const { Op } = require("sequelize");
 const { firstLetterUpperCase } = require("../functions.js");
 
-app.get("/", async (req, res, next) => {
-  const { name } = req.query;
-  console.log(req.query);
-  try {
-    if (name) {
-      return Country.findAll({
-        where: {
-          name: {
-            [Op.startsWith]: name.toLowerCase(),
-          },
-        },
-      }).then((result) =>
-        res.send(
-          result.slice(0, 5).map((country) => {
-            country.name = firstLetterUpperCase(country.name);
-            return country;
-          })
-        )
-      );
-    }
-    // return Country.findAll().then((result) =>
-    //   res.send(
-    //     result.slice(0, 10).map((country) => {
-    //       country.name = firstLetterUpperCase(country.name);
-    //       return country;
-    //     })
-    //   )
-    // );
-  } catch (error) {
-    next(error);
-  }
-});
+// app.get("/", async (req, res, next) => {
+//   const { name } = req.query;
+//   console.log(req.query);
+//   try {
+//     if (name) {
+//       return Country.findAll({
+//         where: {
+//           name: {
+//             [Op.startsWith]: name.toLowerCase(),
+//           },
+//         },
+//       }).then((result) =>
+//         res.send(
+//           result.slice(0, 5).map((country) => {
+//             country.name = firstLetterUpperCase(country.name);
+//             return country;
+//           })
+//         )
+//       );
+//     }
+//     // return Country.findAll().then((result) =>
+//     //   res.send(
+//     //     result.slice(0, 10).map((country) => {
+//     //       country.name = firstLetterUpperCase(country.name);
+//     //       return country;
+//     //     })
+//     //   )
+//     // );
+//   } catch (error) {
+//     next(error);
+//   }
+// });
 app.post("/", async (req, res, next) => {
-  // const { name } = req.query;
-  console.log(req.body);
   const init = req.body.page * 12 - 12;
   const end = init + 12;
   const { continent, activity, orderAlphabet, orderPopulation, name } =
@@ -47,38 +45,6 @@ app.post("/", async (req, res, next) => {
   let order = false;
   if (orderAlphabet || orderPopulation) order = true;
   try {
-    // if (req.body.sname) {
-    //   console.log("entre", req.body.name);
-    //   return Country.findAll({
-    //     where: {
-    //       name: {
-    //         [Op.startsWith]: req.body.name.toLowerCase(),
-    //         // [Op.startsWith]: "c",
-    //       },
-    //     },
-    //   }).then((result) =>
-    //     res.send({
-    //       pageTotal: Math.ceil(result.length / 9),
-    //       result: result.slice(init, end).map((country) => {
-    //         country.name = firstLetterUpperCase(country.name);
-    //         return country;
-    //       }),
-    //     })
-    //   );
-    // }
-    // return Country.findAll({
-    //   where: {
-    //     if (continent) continent: "Africa",
-    //   },
-    // }).then((result) =>
-    //   res.send({
-    //     pageTotal: Math.ceil(result.length / 9),
-    //     result: result.slice(init, end).map((country) => {
-    //       country.name = firstLetterUpperCase(country.name);
-    //       return country;
-    //     }),
-    //   })
-    // );
     let result = [];
     if (continent && activity && order) {
       if (orderAlphabet && orderAlphabet === "az") {

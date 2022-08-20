@@ -1,0 +1,20 @@
+.container {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+.searchFilter {
+  display: flex;
+  justify-content: space-between;
+  width: 75%;
+  margin-top: 15px;
+}
+
+.containerCard {
+  width: 75%;
+  padding-top: 40px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-column-gap: 60px;
+  grid-row-gap: 40px;
+}

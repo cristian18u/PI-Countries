@@ -1,0 +1,15 @@
+.input {
+  height: 32px;
+  width: 250px;
+  font-size: 15px;
+}
+.search {
+  height: 32px;
+}
+.suggest {
+  width: 250px;
+  position: absolute;
+}
+.suggest button {
+  width: 250px;
+}

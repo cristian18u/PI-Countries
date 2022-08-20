@@ -1,8 +1,8 @@
 import React from "react";
-import {useSelector, useDispatch } from 'react-redux'
-import {getCountryDetail} from '../../redux/actions.js'
-import ActivityCard from '../activity/ActivityCard.jsx'
-import './CountryDetail.css'
+import { useSelector } from "react-redux";
+// import {getCountryDetail} from '../../redux/actions.js'
+import ActivityCard from "../Activity/ActivityCard.jsx";
+import "./CountryDetail.css";
 
 export default function CountryDetail({ match }) {
   const {
@@ -17,12 +17,11 @@ export default function CountryDetail({ match }) {
     activities,
   } = useSelector((store) => store.countryDetail);
 
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
   React.useEffect(() => {
-  dispatch(getCountryDetail(match.params.id));
+    // dispatch(getCountryDetail(match.params.id));
   }, []);
-
 
   return (
     <div>
@@ -33,7 +32,7 @@ export default function CountryDetail({ match }) {
       <p>Subregion: {subregion}</p>
       <p>Population: {population}</p>
       <p>Capital: {capital}</p>
-      <p>Area: {area+' '+'Km2'}</p>
+      <p>Area: {area + " Km2"}</p>
       <p>Activities:</p>
       <div className="containerActivity">
         {activities?.map((activity) => (
@@ -47,5 +46,5 @@ export default function CountryDetail({ match }) {
         ))}
       </div>
     </div>
-    );
+  );
 }

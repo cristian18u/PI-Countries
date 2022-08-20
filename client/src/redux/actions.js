@@ -1,139 +1,36 @@
 import axios from "axios";
 
-export const GET_ALL_COUNTRIES = "GET_ALL_COUNTRIES";
-export const GET_COUNTRY = "GET_COUNTRY";
-export const GET_COUNTRY_INPUT = "GET_COUNTRY_INPUT";
-export const GET_COUNTRY_DETAIL = "GET_COUNTRY_DETAIL";
-export const FILTER_CONTINENT = "FILTER_CONTINENT";
-export const FILTER_ACTIVITY = "FILTER_ACTIVITY";
-export const ORDER_ALPHABET = "ORDER_ALPHABET";
-export const ORDER_POPULATION = "ORDER_POPULATION";
-export const COUNTRY_FILTER = "COUNTRY_FILTER";
-export const CREATE_ACTIVITY = "CREATE_ACTIVITY";
-export const FILTER_NAME_COUNTRY = "FILTER_NAME_COUNTRY";
-export const ADD_COUNTRY = "ADD_COUNTRY";
-export const DELETE_ADDED_COUNTRY = "DELETE_ADDED_COUNTRY";
-export const UPDATE_PAGE = "UPDATE_PAGE";
-export const RELOAD_PAGE = "RELOAD_PAGE";
-
-export function getAllCountries() {
-  return function (dispatch) {
-    Promise.all([
-      axios.get("http://localhost:3001/countries"),
-      axios.get("http://localhost:3001/countries/continents"),
-      axios.get("http://localhost:3001/activity/all"),
-    ]).then((result) => dispatch({ type: GET_ALL_COUNTRIES, payload: result }));
-  };
-}
-
-export function getCountry(name) {
-  return function (dispatch) {
-    axios
-      .get(`http://localhost:3001/countries?name=${name}`)
-      .then((result) => dispatch({ type: GET_COUNTRY, payload: result.data }))
-      .catch(() => dispatch({ type: GET_COUNTRY, payload: null }));
-  };
-}
-
-export function countryFilter(body) {
+export function getCountry(body) {
   return function (dispatch) {
     axios
       .post(`http://localhost:3001/countries`, body)
-      .then((result) =>
-        dispatch({ type: COUNTRY_FILTER, payload: result.data })
-      )
-      .catch(() => dispatch({ type: COUNTRY_FILTER, payload: null }));
-  };
-}
-export function getCountryInput(name) {
-  return function (dispatch) {
-    axios
-      .get(`http://localhost:3001/countries/input?name=${name}`)
-      .then((result) =>
-        dispatch({ type: GET_COUNTRY_INPUT, payload: result.data })
-      )
-      .catch(() => dispatch({ type: GET_COUNTRY_INPUT, payload: null }));
-  };
-}
-
-export function getCountryDetail(id) {
-  return function (dispatch) {
-    axios
-      .get(`http://localhost:3001/countries/${id}`)
-      .then((result) =>
-        dispatch({ type: GET_COUNTRY_DETAIL, payload: result.data })
+      .then((result) => dispatch({ type: "@getCountry", payload: result.data }))
+      .catch(() =>
+        dispatch({ type: "@getCountry", payload: { result: [], pageTotal: 1 } })
       );
   };
 }
 
-// export function order(order) {
-//   return function (dispatch) {
-//     axios
-//       .get(`http://localhost:3001/countries/order?order=${order}`)
-//       .then((result) => dispatch({ type: ORDER, payload: result.data }));
-//   };
-// }
-
-export function filterContinent(payload) {
-  return { type: FILTER_CONTINENT, payload };
-}
-export function filterActivity(payload) {
-  return { type: FILTER_ACTIVITY, payload };
-}
-export function orderAlphabet(payload) {
-  return { type: ORDER_ALPHABET, payload };
-}
-export function orderPopulation(payload) {
-  return { type: ORDER_POPULATION, payload };
+export function setPage(page) {
+  return { type: "@setPage", payload: page };
 }
 
-export function filterNameCountry(name) {
-  return function (dispatch) {
-    axios
-      .get(`http://localhost:3001/countries/filterCountry?name=${name}`)
-      .then((result) =>
-        dispatch({ type: FILTER_NAME_COUNTRY, payload: result.data })
-      )
-      .catch(() => dispatch({ type: FILTER_NAME_COUNTRY, payload: null }));
-  };
+export function setName(name) {
+  return { type: "@setName", payload: name };
 }
 
-// export function filterActivity(name) {
-//   return function (dispatch) {
-//     axios
-//       .get(`http://localhost:3001/activity/filter?name=${name}`)
-//       .then((result) => dispatch({ type: ORDER, payload: result.data }));
-//   };
-// }
-export function sendFormBody(body) {
-  // return function (dispatch) {
-  axios.post("http://localhost:3001/countries", body);
-  // .then((result) => dispatch({ type: ORDER, payload: result.data }));
-  // };
-}
-export function addCountry(payload) {
-  return { type: ADD_COUNTRY, payload };
+export function setContinentFilter(continent) {
+  return { type: "@setContinentFilter", payload: continent };
 }
 
-export function deleteAddedCountry(payload) {
-  return { type: DELETE_ADDED_COUNTRY, payload };
+export function setActivityFilter(activity) {
+  return { type: "@setActivityFilter", payload: activity };
 }
 
-export function createActivity(body) {
-  console.log("body");
-  return function (dispatch) {
-    axios
-      .post("http://localhost:3001/activity", body)
-      .then((result) =>
-        dispatch({ type: CREATE_ACTIVITY, payload: result.data })
-      );
-  };
+export function setAlphabetOrder(type) {
+  return { type: "@setAlphabetOrder", payload: type };
 }
 
-export function updatePage(payload) {
-  return { type: UPDATE_PAGE, payload };
-}
-
-export function reloadPage(payload) {
-  return { type: RELOAD_PAGE, payload };
+export function setPopulationOrder(type) {
+  return { type: "@setPopulationOrder", payload: type };
 }

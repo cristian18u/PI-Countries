@@ -1,10 +1,24 @@
-.containerActivity {
+.container {
+  display: flex;
+  justify-content: center;
+}
+
+.createActivity {
+  width: 700px;
+  height: 1000px;
+  display: grid;
+  background: yellow;
+  grid-template-rows: repeat(8, 1fr);
+  row-gap: 10px;
+  column-gap: 20px;
+}
+
+/* .containerActivity {
   display: flex;
   justify-content: center;
 }
 .formulation1 {
   display: inline-flex;
-  /*justify-content: center;*/
 }
 .formulation2 {
   display: inline-flex;
@@ -32,9 +46,7 @@
   width: 150px;
 }
 .deleteAddedCountries button{
-  /*display: flex;*/
-  /*justify-content: right;*/
 }
 span{
 color: red;
-}
+} */
