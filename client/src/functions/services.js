@@ -18,4 +18,7 @@ export const fetchTodo = () => {
 
 export function createActivity(body) {
   axios.post("http://localhost:3001/activity", body).then((result) => result);
+  setTimeout(function () {
+    alert("Tourist activity added successfully");
+  }, 1500);
 }

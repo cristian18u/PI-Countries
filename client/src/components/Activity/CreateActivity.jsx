@@ -2,7 +2,7 @@
 import axios from "axios";
 import React from "react";
 import c from "./CreateActivity.module.css";
-import { validationForm } from "../../functions/functions";
+import { resetSelect, validationForm } from "../../functions/functions";
 import { createActivity, fetchTodo } from "../../functions/services";
 
 export default function CreateActivity() {
@@ -42,18 +42,12 @@ export default function CreateActivity() {
 
   function handleChange(event) {
     const { name, value } = event.target;
+    console.log(name, value);
     setInput({
       ...input,
       [name]: value,
     });
   }
-
-  // function filterContinent(e) {
-  //   if (e.target.value === "select") dispatch(setContinentFilter(""));
-  //   else dispatch(setContinentFilter(e.target.value));
-  //   dispatch(setPage(1));
-  //   dispatch(setName(""));
-  // }
 
   function setDifficulty(e) {
     if (e.target.value === "select") setInput({ ...input, difficulty: "" });
@@ -74,22 +68,6 @@ export default function CreateActivity() {
       .then((result) => setState({ ...state, countries: result.data }));
   }
 
-  function handleSubmit(event) {
-    event.preventDefault();
-    createActivity(body);
-    setInput({
-      name: "",
-      difficulty: "",
-      duration: "",
-      season: "",
-      nameCountryInput: "",
-    });
-    setState({ ...state, addedCountries: [] });
-    setTimeout(function () {
-      alert("Tourist activity added successfully");
-    }, 1500);
-  }
-
   function addCountry(country) {
     if (!state.addedCountries.find((element) => element === country)) {
       setState({
@@ -97,6 +75,7 @@ export default function CreateActivity() {
         addedCountries: [...state.addedCountries, country],
       });
     }
+    setInput({ ...input, nameCountryInput: "" });
   }
 
   function deleteAddedCountry(country) {
@@ -108,87 +87,118 @@ export default function CreateActivity() {
     });
   }
 
+  function resetForm() {
+    createActivity(body);
+    setInput({
+      name: "",
+      difficulty: "",
+      duration: "",
+      season: "",
+      nameCountryInput: "",
+    });
+    setState({ ...state, addedCountries: [] });
+    resetSelect();
+  }
+
   return (
     <div className={c.container}>
       <div className={c.createActivity}>
-        <form className="formulation1" onSubmit={handleSubmit}>
-          <div className="createActivity">
-            <label>name</label>
-            <input
-              type="text"
-              name="name"
-              value={input.name}
-              onChange={handleChange}
-            />
-            {error.name && input.name ? <span>{error.name}</span> : null}
-            <label>difficulty</label>
-            <select id="difficulty" onChange={setDifficulty}>
-              <option value="select">--Select--</option>
-              {[1, 2, 3, 4, 5].map((difficulty, index) => (
-                <option key={index}>{difficulty}</option>
-              ))}
-            </select>
-            {error.difficulty && input.difficulty ? (
-              <span>{error.difficulty}</span>
-            ) : null}
-            <label>duration (hr)</label>
-            <select id="duration" onChange={setDuration}>
-              <option value="select">--Select--</option>
-              {[1, 2, 3, 4, 5, 6, 7, 8].map((duration, index) => (
-                <option key={index}>{duration}</option>
-              ))}
-            </select>
-            {error.duration && input.duration ? (
-              <span>{error.duration}</span>
-            ) : null}
-            <label>season</label>
-            <select id="season" onChange={setSeason}>
-              <option value="select">--Select--</option>
-              {season.map((season, index) => (
-                <option key={index}>{season}</option>
-              ))}
-            </select>
-            {error.season && input.season ? <span>{error.season}</span> : null}
-            <input
-              type="submit"
-              name="Create Activity"
-              disabled={Object.keys(error).length === 0 ? false : true}
-            />
-          </div>
-        </form>
-        <div className="containerSearch">
+        <div className={c.title}>
+          <h3>Create To Activity</h3>
+        </div>
+        <div className={c.name}>
+          <label>name</label>
+          <input
+            type="text"
+            name="name"
+            value={input.name}
+            onChange={handleChange}
+          />
+          {error.name && input.name ? <span>{error.name}</span> : null}
+        </div>
+        <div className={c.difficulty}>
+          <label>difficulty</label>
+          <select id="difficulty" onChange={setDifficulty}>
+            <option value="select">--Select--</option>
+            {[1, 2, 3, 4, 5].map((difficulty, index) => (
+              <option key={index}>{difficulty}</option>
+            ))}
+          </select>
+          {error.difficulty && input.difficulty ? (
+            <span>{error.difficulty}</span>
+          ) : null}
+        </div>
+        <div className={c.duration}>
+          <label>duration (hr)</label>
+          <select id="duration" onChange={setDuration}>
+            <option value="select">--Select--</option>
+            {[1, 2, 3, 4, 5, 6, 7, 8].map((duration, index) => (
+              <option key={index}>{duration}</option>
+            ))}
+          </select>
+          {error.duration && input.duration ? (
+            <span>{error.duration}</span>
+          ) : null}
+        </div>
+        <div className={c.season}>
+          <label>season</label>
+          <select id="season" onChange={setSeason}>
+            <option value="select">--Select--</option>
+            {season.map((season, index) => (
+              <option key={index}>{season}</option>
+            ))}
+          </select>
+          {error.season && input.season ? <span>{error.season}</span> : null}
+        </div>
+        {/* </div> */}
+        {/* </form> */}
+        <div className={c.countryInput}>
+          <label>Added Country</label>
           <input
             type="text"
             name="nameCountryInput"
-            placeholder="Country or Continent..."
+            placeholder="Country..."
             value={input.nameCountryInput}
             onChange={handleChange}
           />
           {input.nameCountryInput ? (
-            <div className="containerNameCountries">
-              {state.countries ? (
-                state.countries.map((country, index) => (
-                  <button key={index} onClick={() => addCountry(country)}>
-                    {country}
-                  </button>
-                ))
-              ) : (
-                <h3>Not Result...</h3>
-              )}
+            <div className={c.suggest}>
+              {state.countries?.map((country, index) => (
+                <button key={index} onClick={() => addCountry(country)}>
+                  {country}
+                </button>
+              ))}
             </div>
           ) : null}
+          {/* {error.country && input.nameCountryInput ? (
+            <span>{error.country}</span>
+          ) : null} */}
         </div>
-        <div className="addCountry">
+        <div
+          className="addedCountry"
+          style={{
+            display: "flex",
+            "align-items": "flex-start",
+            gap: "5px",
+            "flex-wrap": "wrap",
+            width: "300px",
+          }}
+        >
           {state.addedCountries?.map((country, index) => (
-            <div key={index} className="deleteAddedCountries">
+            <div key={index} className={c.delete}>
               <div>{country}</div>
               <button onClick={() => deleteAddedCountry(country)}>X</button>
             </div>
           ))}
         </div>
-        {error.country && input.nameCountryInput ? (
-          <span>{error.country}</span>
-        ) : null}
+        <div className={c.buttonCreate}>
+          <button
+            disabled={Object.keys(error).length === 0 ? false : true}
+            onClick={resetForm}
+          >
+            Create Activity
+          </button>
+        </div>
       </div>
     </div>
   );

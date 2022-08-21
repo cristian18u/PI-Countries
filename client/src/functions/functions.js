@@ -6,6 +6,11 @@ export function resetSelect() {
     document.getElementById("continent").selectedIndex = 0;
     document.getElementById("activity").selectedIndex = 0;
   }
+  if (document.getElementById("difficulty")) {
+    document.getElementById("difficulty").selectedIndex = 0;
+    document.getElementById("season").selectedIndex = 0;
+    document.getElementById("duration").selectedIndex = 0;
+  }
 }
 
 export function validationForm(input, addedCountries, activities) {
