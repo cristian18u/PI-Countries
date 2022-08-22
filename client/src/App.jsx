@@ -6,6 +6,13 @@ import Home from "./components/Home/Home.jsx";
 import LandingPage from "./components/LandingPage/LandingPage.jsx";
 import Navbar from "./components/Navbar/NavBar.jsx";
 
+import dotenv from "dotenv";
+import axios from "axios";
+
+dotenv.config();
+
+axios.defaults.baseURL = process.env.REACT_APP_API || "http://localhost:3001";
+
 function App() {
   return (
     <React.Fragment>
