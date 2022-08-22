@@ -22,3 +22,17 @@ export function createActivity(body) {
     alert("Tourist activity added successfully");
   }, 1500);
 }
+
+export function getDetail(id) {
+  const [detail, setDetail] = useState({});
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    axios
+      .get(`http://localhost:3001/countries/${id}`)
+      .then((result) => setDetail(result.data))
+      .finally(() => setLoading(false));
+  }, []);
+
+  return { detail, loading };
+}

@@ -7,24 +7,6 @@ const initialState = {
   activityFilter: "",
   alphabetOrder: "",
   populationOrder: "",
-
-  // countriesInput: [],
-  // continents: [],
-  // activities: [],
-  // countryDetail: {},
-  // bodyActivity: {},
-  // nameCountries: [],
-  // addedCountries: [],
-  // countriesDb: [],
-  // filter: {
-  //   continent: null,
-  //   activity: null,
-  // },
-  // order: {
-  //   alphabet: null,
-  //   population: null,
-  // },
-  // pageActionActual: "home",
 };
 
 export default function rootReducer(state = initialState, { type, payload }) {
@@ -34,6 +16,11 @@ export default function rootReducer(state = initialState, { type, payload }) {
         ...state,
         countries: payload.result,
         pageTotal: payload.pageTotal,
+      };
+    case "@getCountryDetail":
+      return {
+        ...state,
+        countryDetail: payload,
       };
     case "@setPage":
       return {

@@ -150,8 +150,6 @@ export default function CreateActivity() {
           </select>
           {error.season && input.season ? <span>{error.season}</span> : null}
         </div>
-        {/* </div> */}
-        {/* </form> */}
         <div className={c.countryInput}>
           <label>Added Country</label>
           <input
@@ -170,9 +168,6 @@ export default function CreateActivity() {
               ))}
             </div>
           ) : null}
-          {/* {error.country && input.nameCountryInput ? (
-            <span>{error.country}</span>
-          ) : null} */}
         </div>
         <div
           className="addedCountry"

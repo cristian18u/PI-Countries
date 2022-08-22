@@ -1,0 +1,62 @@
+.loading {
+  display: flex;
+  justify-content: center;
+  margin-top: 150px;
+  font-size: 30px;
+}
+.containerDetail {
+  display: flex;
+  width: 60%;
+  border: 2px solid #d6d6d6;
+  border-radius: 30px;
+  margin-left: 20%;
+  margin-top: 40px;
+}
+.country {
+  width: 60%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+}
+.country h2 {
+  display: flex;
+  justify-content: center;
+  height: 20px;
+}
+.country img {
+  width: 60%;
+  border-radius: 15px;
+}
+.country h4 {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10px;
+  margin-top: 0;
+}
+.info {
+  border: 2px solid #d6d6d6;
+  border-radius: 10px;
+  margin-bottom: 30px;
+  margin-top: 30px;
+  padding-left: 30px;
+  padding-right: 30px;
+}
+.containerActivity {
+  width: 40%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  row-gap: 20px;
+  padding-bottom: 30px;
+}
+.containerActivity h2 {
+  margin-top: 10px;
+  margin-bottom: 0;
+}
+.activity {
+  width: 80%;
+  border: 2px solid black;
+  padding-left: 20px;
+  border: 2px solid #d6d6d6;
+}

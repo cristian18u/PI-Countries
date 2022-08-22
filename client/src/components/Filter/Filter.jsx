@@ -45,6 +45,24 @@ export default function Filter() {
     <>
       <div className={c.filter}>
         <div>
+          <label className="label">Activity </label>
+          <select id="activity" onChange={filterActivity}>
+            <option value="select">--Select--</option>
+            {activities.map((activity, index) => (
+              <option key={index}>{activity}</option>
+            ))}
+          </select>
+        </div>
+        <div>
+          <label className="label">Continent </label>
+          <select id="continent" onChange={filterContinent}>
+            <option value="select">--Select--</option>
+            {continents?.map((continent, index) => (
+              <option key={index}>{continent}</option>
+            ))}
+          </select>
+        </div>
+        <div>
           <label className="label">Order for:</label>
           <select id="order" onChange={order}>
             <option value="select">--Select--</option>
@@ -56,24 +74,6 @@ export default function Filter() {
               <option value="asc">ASC</option>
               <option value="desc">DESC</option>
             </optgroup>
-          </select>
-        </div>
-        <div>
-          <label className="label">Activity</label>
-          <select id="activity" onChange={filterActivity}>
-            <option value="select">--Select--</option>
-            {activities.map((activity, index) => (
-              <option key={index}>{activity}</option>
-            ))}
-          </select>
-        </div>
-        <div>
-          <label className="label">Continent</label>
-          <select id="continent" onChange={filterContinent}>
-            <option value="select">--Select--</option>
-            {continents?.map((continent, index) => (
-              <option key={index}>{continent}</option>
-            ))}
           </select>
         </div>
       </div>
