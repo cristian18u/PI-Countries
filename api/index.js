@@ -24,9 +24,15 @@ const { conn } = require('./src/db.js');
 // Syncing all the models at once.
 // conn.sync().then(() => {
   const restart = false
+// conn.sync({ force: restart }).then(() => {
+//   server.listen(3001, async () => {
+//     if (restart) await load()
+//     console.log('listening at 3001...'); // eslint-disable-line no-console
+//   });
+// });
 conn.sync({ force: restart }).then(() => {
-  server.listen(3001, async () => {
+  server.listen(process.env.PORT, () => {
     if (restart) await load()
-    console.log('listening at 3001...'); // eslint-disable-line no-console
+    console.log("%s listening at 3000"); // eslint-disable-line no-console
   });
 });

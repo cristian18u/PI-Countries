@@ -7,17 +7,15 @@ export const fetchTodo = () => {
   const [activities, setActivities] = useState([]);
   useEffect(() => {
     axios
-      .get("http://localhost:3001/countries/continents")
+      .get("/countries/continents")
       .then((result) => setContinents(result.data));
-    axios
-      .get("http://localhost:3001/activity/all")
-      .then((result) => setActivities(result.data));
+    axios.get("/activity/all").then((result) => setActivities(result.data));
   }, []);
   return { continents, activities };
 };
 
 export function createActivity(body) {
-  axios.post("http://localhost:3001/activity", body).then((result) => result);
+  axios.post("/activity", body).then((result) => result);
   setTimeout(function () {
     alert("Tourist activity added successfully");
   }, 1500);
@@ -29,7 +27,7 @@ export function getDetail(id) {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:3001/countries/${id}`)
+      .get(`/countries/${id}`)
       .then((result) => setDetail(result.data))
       .finally(() => setLoading(false));
   }, []);

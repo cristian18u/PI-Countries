@@ -3,7 +3,7 @@ import axios from "axios";
 export function getCountry(body) {
   return function (dispatch) {
     axios
-      .post(`http://localhost:3001/countries`, body)
+      .post(`/countries`, body)
       .then((result) => dispatch({ type: "@getCountry", payload: result.data }))
       .catch(() =>
         dispatch({ type: "@getCountry", payload: { result: [], pageTotal: 1 } })

@@ -64,7 +64,7 @@ export default function CreateActivity() {
 
   function getNameCountry(name) {
     axios
-      .get(`http://localhost:3001/countries/input?name=${name}`)
+      .get(`/countries/input?name=${name}`)
       .then((result) => setState({ ...state, countries: result.data }));
   }
 

@@ -24,7 +24,7 @@ export default function SearchBar({ body }) {
 
   function getCountryInput(name) {
     axios
-      .get(`http://localhost:3001/countries/input?name=${name}`)
+      .get(`/countries/input?name=${name}`)
       .then((result) => setCountriesInput(result.data));
   }
 
