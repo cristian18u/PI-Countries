@@ -23,7 +23,7 @@ const { conn } = require("./src/db.js");
 
 // Syncing all the models at once.
 // conn.sync().then(() => {
-const restart = false;
+const restart = true;
 // conn.sync({ force: restart }).then(() => {
 //   server.listen(3001, async () => {
 //     if (restart) await load()
