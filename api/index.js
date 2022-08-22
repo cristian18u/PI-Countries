@@ -17,13 +17,13 @@
 //     =====`-.____`.___ \_____/___.-`___.-'=====
 //                       `=---='
 //     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-const server = require('./src/app.js');
-const { load } = require('./src/functions.js');
-const { conn } = require('./src/db.js');
+const server = require("./src/app.js");
+const { load } = require("./src/functions.js");
+const { conn } = require("./src/db.js");
 
 // Syncing all the models at once.
 // conn.sync().then(() => {
-  const restart = false
+const restart = false;
 // conn.sync({ force: restart }).then(() => {
 //   server.listen(3001, async () => {
 //     if (restart) await load()
@@ -31,8 +31,8 @@ const { conn } = require('./src/db.js');
 //   });
 // });
 conn.sync({ force: restart }).then(() => {
-  server.listen(process.env.PORT, () => {
-    if (restart) await load()
+  server.listen(process.env.PORT, async () => {
+    if (restart) await load();
     console.log("%s listening at 3000"); // eslint-disable-line no-console
   });
 });
