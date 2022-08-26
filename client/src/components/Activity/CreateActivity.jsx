@@ -3,7 +3,8 @@ import axios from "axios";
 import React from "react";
 import c from "./CreateActivity.module.css";
 import { resetSelect, validationForm } from "../../functions/functions";
-import { createActivity, fetchTodo } from "../../functions/services";
+import { createActivity } from "../../functions/services";
+import { useSelector } from "react-redux";
 
 export default function CreateActivity() {
   const [input, setInput] = React.useState({
@@ -22,8 +23,7 @@ export default function CreateActivity() {
   });
 
   const [state, setState] = React.useState({ addedCountries: [] });
-
-  const { activities } = fetchTodo();
+  const { activities } = useSelector((state) => state);
 
   const season = ["summer", "autumn", "winter", "spring"];
 
@@ -42,7 +42,6 @@ export default function CreateActivity() {
 
   function handleChange(event) {
     const { name, value } = event.target;
-    console.log(name, value);
     setInput({
       ...input,
       [name]: value,

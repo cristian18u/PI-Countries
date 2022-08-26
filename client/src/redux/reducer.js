@@ -1,5 +1,7 @@
 const initialState = {
   countries: [],
+  continents: [],
+  activities: [],
   pageTotal: 0,
   page: 1,
   name: "",
@@ -53,6 +55,16 @@ export default function rootReducer(state = initialState, { type, payload }) {
         ...state,
         populationOrder: payload,
         alphabetOrder: "",
+      };
+    case "@setContinents":
+      return {
+        ...state,
+        continents: payload,
+      };
+    case "@setActivities":
+      return {
+        ...state,
+        activities: payload,
       };
     default:
       return state;

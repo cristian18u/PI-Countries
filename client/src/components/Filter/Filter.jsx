@@ -1,5 +1,4 @@
 import { useDispatch } from "react-redux";
-import { fetchTodo } from "../../functions/services";
 import {
   setActivityFilter,
   setAlphabetOrder,
@@ -10,9 +9,7 @@ import {
 } from "../../redux/actions";
 import c from "./Filter.module.css";
 
-export default function Filter() {
-  const { continents, activities } = fetchTodo();
-
+export default function Filter({ activities, continents }) {
   const dispatch = useDispatch();
 
   function filterContinent(e) {

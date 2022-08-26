@@ -2,7 +2,11 @@
 import { useEffect } from "react";
 import CountryCard from "../Country/CountryCard.jsx";
 import c from "./Home.module.css";
-import { getCountry } from "../../redux/actions.js";
+import {
+  getCountry,
+  setActivities,
+  setContinents,
+} from "../../redux/actions.js";
 import { useDispatch, useSelector } from "react-redux";
 import SearchBar from "../SearchBar/SearchBar.jsx";
 import Filter from "../Filter/Filter.jsx";
@@ -11,6 +15,8 @@ import Paginate from "../Paginate/Paginate.jsx";
 export default function Home() {
   const {
     countries,
+    continents,
+    activities,
     page,
     name,
     continentFilter,
@@ -31,6 +37,11 @@ export default function Home() {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    dispatch(setContinents());
+    dispatch(setActivities());
+  }, []);
+
+  useEffect(() => {
     if (!name) dispatch(getCountry(body));
   }, [
     page,
@@ -45,7 +56,7 @@ export default function Home() {
     <div className={c.container}>
       <div className={c.searchFilter}>
         <SearchBar body={body} />
-        <Filter />
+        <Filter activities={activities} continents={continents} />
       </div>
       <div className={c.containerCard}>
         {countries ? (

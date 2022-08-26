@@ -10,6 +10,24 @@ export function getCountry(body) {
       );
   };
 }
+export function setContinents() {
+  return function (dispatch) {
+    axios
+      .get("/countries/continents")
+      .then((result) =>
+        dispatch({ type: "@setContinents", payload: result.data })
+      );
+  };
+}
+export function setActivities() {
+  return function (dispatch) {
+    axios
+      .get("/activity/all")
+      .then((result) =>
+        dispatch({ type: "@setActivities", payload: result.data })
+      );
+  };
+}
 
 export function setPage(page) {
   return { type: "@setPage", payload: page };
